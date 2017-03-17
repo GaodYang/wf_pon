@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app        version="3.0"        xmlns="http://java.sun.com/xml/ns/javaee"        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+  <display-name>irms.app.workflow.pon</display-name>
+  
+  <listener>
+		<listener-class>
+			org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>
+			org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	
+    <servlet>
+  	  <servlet-name>axis</servlet-name>
+	  <servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
+	  <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+	  <servlet-name>axis</servlet-name>
+	  <url-pattern>/services/*</url-pattern>
+    </servlet-mapping>
+  
+    <context-param>
+	  <param-name>APP_NAME</param-name>
+	  <param-value>WF_PON</param-value>
+    </context-param>
+</web-app>

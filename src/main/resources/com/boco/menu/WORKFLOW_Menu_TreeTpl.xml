@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tpl>
+
+	<!-- 入网 -->
+	<!-- 入网 -->
+	<tree name="PON_NETWORK_PROJECT_XML">
+		<node cuid="PON_NETWORK_PROJECT_XML_1" label_cn="工程信息" icon_cls="c_book_addresses"
+			expanded="1" url="">
+			<node cuid="PON_NETWORK_PROJECT_XML_11" label_cn="待处理工程"
+				icon_cls="c_tag_red" expanded="0"
+				url="/cmp_res/grid/ResGridPanel.jsp?code=irms_service_dict.PROJECT_MANAGE&amp;menuId=PROJECT_MANAGE&amp;userId={userId}">
+			</node>
+			<node cuid="PON_NETWORK_PROJECT_XML_12" label_cn="已处理工程"
+				icon_cls="c_tag_red" expanded="0"
+				url="/jsp/index.jsp">
+			</node>
+		</node>
+	</tree>
+	
+	<tree name="PON_NETWORK_RESOURCE_XML">
+		<node cuid="PON_NETWORK_RESOURCE_XML_1" label_cn="PON设备资源" icon_cls="c_book_addresses"
+			expanded="1" url="">
+			<node cuid="PON_NETWORK_RESOURCE_XML_11" label_cn="ONU"
+				icon_cls="c_tree_ONU" expanded="0"
+				url="/cmp_res/grid/ResGridPanel.jsp?code=irms_service_dict.ONU_MANAGE&amp;menuId=ONU_MANAGE&amp;userId={userId}&amp;source=IRMS">
+			</node>
+			<node cuid="PON_NETWORK_RESOURCE_XML_12" label_cn="POS"
+				icon_cls="c_tree_POS" expanded="0"
+				url="/jsp/index.jsp">
+			</node>
+		</node>
+		<node cuid="PON_NETWORK_RESOURCE_XML_2" label_cn="空间资源" icon_cls="c_book_addresses"
+			expanded="1" url="">
+			<node cuid="PON_NETWORK_RESOURCE_XML_21" label_cn="标准地址"
+				icon_cls="c_tag_red" expanded="0"
+				url="/jsp/index.jsp">
+			</node>
+			<node cuid="PON_NETWORK_RESOURCE_XML_22" label_cn="小区"
+				icon_cls="c_tag_red" expanded="0"
+				url="/jsp/index.jsp">
+			</node>
+			<node cuid="PON_NETWORK_RESOURCE_XML_23" label_cn="覆盖范围"
+				icon_cls="c_tag_red" expanded="0"
+				url="/jsp/index.jsp">
+			</node>
+		</node>
+	</tree>
+	
+</tpl>

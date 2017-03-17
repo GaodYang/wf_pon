@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true">
+	<appender name="LogConsole" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%.1level]%date{MM-dd HH:mm:ss:SSS}[%thread]%class{0}.%line:%msg%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+	</appender>
+	<appender name="PON-INFO"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
+		<File>${catalina.base}${file.separator}logs${file.separator}pon${file.separator}pon8073-info.log
+		</File>
+		<encoder>
+			<pattern>[%.1level]%date{MM-dd HH:mm:ss:SSS}[%thread]%class{0}.%line:%msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
+		    <maxHistory>30</maxHistory>
+	      <fileNamePattern>${catalina.base}${file.separator}logs${file.separator}pon${file.separator}pon8073-info.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern> 
+	      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"> 
+	        <maxFileSize>100MB</maxFileSize> 
+	      </timeBasedFileNamingAndTriggeringPolicy> 
+	  </rollingPolicy> 
+	</appender>
+	<appender name="PON-DEBUG"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
+		<File>${catalina.base}${file.separator}logs${file.separator}pon${file.separator}pon8073-debug.log
+		</File>
+		<encoder>
+			<pattern>[%.1level]%date{MM-dd HH:mm:ss:SSS}[%thread]%class{0}.%line:%msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
+		    <maxHistory>30</maxHistory>
+	      <fileNamePattern>${catalina.base}${file.separator}logs${file.separator}pon${file.separator}pon8073-debug.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern> 
+	      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"> 
+	        <maxFileSize>100MB</maxFileSize> 
+	      </timeBasedFileNamingAndTriggeringPolicy> 
+	  </rollingPolicy> 
+	</appender>
+	<appender name="PON-ERROR"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
+		<File>${catalina.base}${file.separator}logs${file.separator}pon${file.separator}pon8073-error.log
+		</File>
+		<encoder>
+			<pattern>[%.1level]%date{MM-dd HH:mm:ss:SSS}[%thread]%class{0}.%method.%line:%msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		    <maxHistory>30</maxHistory>
+	      <fileNamePattern>${catalina.base}${file.separator}logs${file.separator}pon${file.separator}pon8073-error.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern> 
+	      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"> 
+	        <maxFileSize>100MB</maxFileSize> 
+	      </timeBasedFileNamingAndTriggeringPolicy> 
+	  </rollingPolicy> 
+	</appender>
+	<logger name="com.ibatis" level="DEBUG">
+		<appender-ref ref="PON-DEBUG"/>  
+	</logger>
+	<logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG" > 
+		<appender-ref ref="PON-DEBUG"/> 
+	</logger>		
+	<logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG" >    
+		<appender-ref ref="PON-DEBUG"/> 
+	</logger>
+	<logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG" >
+		<appender-ref ref="PON-DEBUG"/> 
+	</logger>
+	<logger name="java.sql.Connection">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="java.sql.PreparedStatement">
+		<level value="OFF" />
+	</logger>
+	<logger name="java.sql.Statement">
+		<level value="OFF" />
+	</logger>
+	<logger name="jdbc.sqlonly">
+		<level value="OFF" />
+	</logger>
+	<logger name="jdbc.sqltiming">
+		<level value="INFO" />
+	</logger>
+	<logger name="jdbc.audit">
+		<level value="OFF" />
+	</logger>
+	<logger name="jdbc.resultset">
+		<level value="OFF" />
+	</logger>
+	<logger name="jdbc.connection">
+		<level value="OFF" />
+	</logger>
+	
+	<logger name="org.springframework" additivity="false">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="org.apache.commons.httpclient" additivity="false">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="log4jdbc.debug" additivity="false">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="org.directwebremoting" additivity="false">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="org.apache.commons.beanutils" additivity="false">
+		<level value="ERROR" />
+	</logger>
+	<logger name="net.rubyeye" additivity="false">
+		<level value="INFO"></level>
+	</logger>
+	<logger name="com.google.code.yanf4j" additivity="false">
+		<level value="INFO"></level>
+	</logger>
+	<logger name="org.quartz" additivity="false">
+		<level value="ERROR" />
+	</logger>
+	<logger name="com.boco.core.quartz">
+		<level value="ERROR" />
+	</logger>
+	<root level="DEBUG">
+		<appender-ref ref="LogConsole" />
+		<appender-ref ref="PON-INFO" />
+		<appender-ref ref="PON-DEBUG" />
+		<appender-ref ref="PON-ERROR" />
+	</root>
+</configuration>

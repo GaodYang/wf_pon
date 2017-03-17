@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tpl>
+	
+	<grid name="ONU_MANAGE" sql="AN_ONU_MANAGE" title="ONU管理">
+		<plugins>
+			<plugin>number</plugin>
+			<plugin>checkbox</plugin>
+		</plugins>
+		<columns>
+			<column dataIndex="CUID">CUID</column>
+			<column dataIndex="LABEL_CN">ONU名称</column>
+			<column dataIndex="SEQNO">ONU设备SN/MAC/LOGIC_ID</column>
+			<column dataIndex="ACCESS_TYPE">接入类型</column>
+			<column dataIndex="N_RELATED_ACCESS_POINT">安装位置</column>
+			<column dataIndex="N_RELATED_EMS_CUID">所属EMS/SNMS</column>
+			<column dataIndex="N_RELATED_POS_CUID">上联设备</column>
+			<column dataIndex="N_RELATED_POS_PORT_CUID">上联设备端口</column>
+			<column dataIndex="PORT_NUMBER">宽带端口数量</column>
+			<column dataIndex="MAINT_PERSON">一线数据维护人（代维/一线）</column>
+			<column dataIndex="DATA_QUALITY_PERSON">数据质量责任人（移动）</column>
+			<column dataIndex="N_MODEL">规格型号</column>
+			<column dataIndex="N_RELATED_VENDOR_CUID">厂家</column>
+			<column dataIndex="FTTX">接入方式</column>
+			<column dataIndex="OWNERSHIP">资产归属</column>
+			<column dataIndex="OWNERSHIP_MAN">资产归属人</column>
+			<column dataIndex="PRESERVER">维护班组</column>
+			<column dataIndex="MAINT_MODE">维护方式</column>
+			<column dataIndex="DEV_IP">设备IP地址</column>
+			<column dataIndex="LIVE_CYCLE">生命周期状态</column>
+			<column dataIndex="SOFT_VERSION">软件版本</column>
+			<column dataIndex="ONU_ID">ONU_ID号</column>
+			<column dataIndex="AUTH_TYPE">ONU的认证类型</column>
+			<column dataIndex="PASSWORD">密码</column>
+			<column dataIndex="LOGICID">LOGICID</column>
+			<column dataIndex="MAC_ADDR">MAC地址</column>
+			<column dataIndex="CREATE_TIME">建设日期</column>
+			<column dataIndex="RELATED_PROJECT_CUID">所属工程</column>
+		</columns>
+		<cm>
+		{
+			LABEL_CN:{
+				isNotNull:true
+			},
+			N_RELATED_ACCESS_POINT:{
+				isNotNull:true
+			},
+			N_RELATED_EMS_CUID:{
+				isNotNull:true
+			},
+			N_RELATED_POS_CUID:{
+				isNotNull:true
+			},
+			N_RELATED_POS_PORT_CUID:{
+				isNotNull : true
+			},
+			N_MODEL:{
+				isNotNull:true
+			},
+			N_RELATED_VENDOR_CUID:{
+				isNotNull:true
+			},
+			FTTX: {
+				renderer 	: 'fn:rendererFTTX',
+				hidden : false,
+				isNotNull:true
+			},
+			OWNERSHIP: {
+				renderer 	: 'rendererOwnerShip',
+				isNotNull:true
+			},
+			OWNERSHIP_MAN: {
+				renderer 	: 'rendererOwnershipMan',
+				isNotNull:true
+			},
+			PRESERVER: {
+				isNotNull:true
+			},
+			MAINT_MODE: {
+				renderer 	: 'fn:rendererMaintMode',
+				hidden : true,
+				isNotNull:true
+			},
+			DEV_IP: {
+				hidden : true
+			},
+			LIVE_CYCLE: {
+				renderer 	: 'rendererLiveCycle',
+				hidden : false,
+				isNotNull:true
+			},
+			SOFT_VERSION: {
+				hidden : true
+			},
+			ACCESS_TYPE: {
+				renderer 	: 'rendererAccessType',
+				hidden : false
+			},
+			ONU_ID: {
+				hidden : true
+			},
+			AUTH_TYPE: {
+				renderer 	: 'rendererAuthType',
+				hidden : true,
+				isNotNull:true
+			},
+			PASSWORD: {
+				hidden : true
+			},
+			LOGICID: {
+				hidden : true
+			},
+			MAC_ADDR: {
+				hidden : true
+			},
+			SEQNO: {
+				hidden : false
+			},
+			CREATE_TIME: {
+				hidden : true
+			},
+			RELATED_PROJECT_CUID: {
+				hidden : true
+			}
+		}
+		</cm>
+		<orderby>
+		</orderby>
+		<note>
+			ONU管理
+		</note>
+	</grid>
+	
+	<grid name="POS_MANAGE" sql="AN_POS_MANAGE" title="POS管理">
+		<plugins>
+			<plugin>number</plugin>
+			<plugin>checkbox</plugin>
+		</plugins>
+		<columns>
+			  <column dataIndex="CUID">CUID</column>
+			  <column dataIndex="LABEL_CN">分光器名称</column>
+		      <column dataIndex="N_RELATED_DISTRICT_CUID">所属区域</column>
+			  <column dataIndex="RATION">分光比</column>
+			  <column dataIndex="N_RELATED_CAB_CUID">安装位置</column>
+			  <column dataIndex="N_RELATED_UPNE_CUID">上联设备</column>
+			  <column dataIndex="N_RELATED_UPNE_PORT_CUID">上联设备主用端口</column>
+			  <column dataIndex="N_RELATED_PORT2_CUID">上联设备备用端口</column>
+			  <column dataIndex="PRESERVER">维护班组</column>
+		   	  <column dataIndex="N_RELATED_VENDOR_CUID">生产厂商</column>
+			  <column dataIndex="OWNERSHIP">资产归属</column>
+		      <column dataIndex="OWNERSHIP_MAN">资产归属人</column>
+		   	  <column dataIndex="MAINT_PERSON">一线数据维护人（代维/一线）</column>
+			  <column dataIndex="DATA_QUALITY_PERSON">数据质量责任人（移动）</column>
+              <column dataIndex="LIVE_CYCLE">生命周期状态</column>
+              <column dataIndex="ACCESS_TYPE">接入类型</column>
+			  <column dataIndex="CAN_ALLOCATE_TO_USER">是否直接带用户</column>
+			  <column dataIndex="SETUP_TIME">入网时间</column>
+			  <column dataIndex="PRESERVER">维护班组</column>
+			  <column dataIndex="MAINT_MODE">维护方式</column>
+			  <column dataIndex="CREATE_TIME">建设日期</column>
+			  <column dataIndex="SEQNO">SN码</column>
+			  <column dataIndex="RELATED_PROJECT_CUID">所属工程</column>
+		</columns>
+		<cm>
+		{	
+			CUID : {
+				hidden : true
+			},
+			LABEL_CN: {
+				isNotNull:true
+			},
+			N_RELATED_DISTRICT_CUID: {
+				isNotNull:true
+			},
+			RATION: {
+				isNotNull:true
+			},
+			N_RELATED_CAB_CUID: {
+				isNotNull:true
+			},
+			N_RELATED_OLT_CUID: {
+				isNotNull:true
+			},
+			N_RELATED_PORT_CUID: {
+				isNotNull:true
+			},
+			N_RELATED_VENDOR_CUID: {
+				isNotNull:true
+			},
+			OWNERSHIP: {
+				renderer : 'rendererOwnerShip',
+				isNotNull:true
+			},
+			OWNERSHIP_MAN: {
+				renderer : 'rendererOwnershipMan',
+				isNotNull:true
+			},
+			LIVE_CYCLE: {
+			    renderer : 'rendererLiveCycle',
+				isNotNull:true
+			},
+			CAN_ALLOCATE_TO_USER : {
+				renderer : 'fn:rendererCanAllocateToUser',
+				hidden : true,
+				isNotNull:true
+			},
+			SETUP_TIME: {
+				isNotNull:true
+			},
+			ACCESS_TYPE: {
+				renderer : 'rendererAccessType',
+			},
+			PRESERVER: {
+				isNotNull:true
+			},
+			MAINT_MODE: {
+			    renderer : 'fn:rendererMaintMode',
+				hidden : true,
+				isNotNull:true
+			},
+			CREATE_TIME: {
+				isNotNull:true
+			},
+			SEQNO: {
+				isNotNull:true
+			},
+			RELATED_PROJECT_CUID: {
+				isNotNull:true
+			}
+		}
+		</cm>
+		<orderby>
+		</orderby>
+		<note>
+			POS管理
+		</note>
+	</grid>
+	
+	<grid name="ONU_PTP_MANAGE" sql="ONU_PTP_MANAGE" title="端口管理">
+		<plugins>
+			<plugin>number</plugin>
+			<plugin>checkbox</plugin>
+		</plugins>
+		<columns>
+			<column dataIndex="N_RELATED_NE_CUID">所属ONU</column>
+			<column dataIndex="N_RELATED_DISTRICT_CUID">所属区域</column>
+			<column dataIndex="LABEL_CN">端口名称</column>
+			<column dataIndex="PORT_NO">端口号</column>   
+			<column dataIndex="N_RELATED_CARD_CUID">板卡名称</column>
+			<column dataIndex="PORT_RATE">端口速率</column>
+			<!--<column dataIndex="PORT_SUB_TYPE">端口类型</column>
+			<column dataIndex="PORT_TYPE">光电属性</column>-->
+			<!--<column dataIndex="VLAN">端口VLAN</column>-->
+			<column dataIndex="PORT_STATE">端口状态</column>
+			<column dataIndex="REMARK">备注</column>
+			 <column dataIndex="CUID">CUID</column> 
+		</columns>
+		<cm>
+		{	
+			N_FDN : {
+				renderer 	: 'fn:rendererOwnedContainer'
+			},
+			LABEL_CN:{
+				isNotNull:true
+			},
+			N_RELATED_NE_CUID:{
+				isNotNull:true
+			},
+			PORT_SUB_TYPE : {
+				renderer : 'fn:rendererPortSubType',
+				isNotNull:true
+			},
+			PORT_TYPE: {
+				renderer : 'fn:rendererPortType'
+			},
+			PORT_RATE: {
+				renderer : 'fn:rendererPportRate',
+				isNotNull:true
+			},
+			PORT_STATE: {
+				renderer : 'fn:rendererPortState'
+			},
+			REMARK				: {
+				hidden : true
+			} 
+		}
+		</cm>
+		<orderby>
+		</orderby>
+		<note>
+			端口管理
+		</note>
+	</grid>
+	
+	<grid name="POS_PTP_MANAGE" sql="POS_PTP_MANAGE" title="端口管理">
+		<plugins>
+			<plugin>number</plugin>
+			<plugin>checkbox</plugin>
+		</plugins>
+		<columns>
+			<column dataIndex="N_RELATED_NE_CUID">所属分光器</column>
+			<column dataIndex="N_RELATED_DISTRICT_CUID">所属区域</column>
+			<column dataIndex="LABEL_CN">端口名称</column>
+			<column dataIndex="PORT_NO">端口序号</column>
+			<column dataIndex="N_RELATED_CARD_CUID">板卡名称</column>
+			<column dataIndex="PORT_RATE">端口速率</column>
+			<!--<column dataIndex="PORT_SUB_TYPE">端口类型</column>
+			<column dataIndex="PORT_TYPE">光电属性</column>-->
+			<column dataIndex="PORT_STATE">端口状态</column>
+			<column dataIndex="REMARK">备注</column>
+			<column dataIndex="CUID">CUID</column> 
+		</columns>
+		<cm>
+		{	PORT_NO : {
+				 editor: {
+	                xtype: 'textfield',
+	                allowBlank: false
+            	},
+            	isNotNull:true
+			},
+			LABEL_CN:{
+				isNotNull:true
+			},
+			N_RELATED_NE_CUID:{
+				isNotNull:true
+			},
+			PORT_SUB_TYPE : {
+				renderer : 'fn:rendererPortSubType',
+				isNotNull:true
+			},
+			PORT_TYPE: {
+				renderer : 'fn:rendererPortType'
+			},
+			PORT_RATE: {
+				renderer : 'fn:rendererPportRate',
+				isNotNull:true
+			},
+			PORT_STATE: {
+				renderer : 'fn:rendererPortState'
+			},
+			REMARK				: {
+				hidden : true
+			} 
+		}
+		</cm>
+		<orderby>
+		</orderby>
+		<note>
+			端口管理
+		</note>
+	</grid>
+	
+</tpl>

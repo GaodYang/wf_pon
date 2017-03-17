@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tpl>
+	
+	<sql name="AN_ONU_MANAGE" dao="IbatisResDAO">
+		<![CDATA[
+		SELECT A.CUID,
+			       A.LABEL_CN,
+			       A.RELATED_DISTRICT_CUID,
+			       (SELECT LABEL_CN FROM FIBER_CAB_GX WHERE CUID = A.RELATED_ACCESS_POINT
+			         UNION ALL
+			        SELECT LABEL_CN FROM FIBER_DP_GX WHERE CUID = A.RELATED_ACCESS_POINT) AS N_RELATED_ACCESS_POINT,
+			        A.RELATED_ACCESS_POINT,
+			       (SELECT T.LABEL_CN FROM NMS_SYSTEM T WHERE T.CUID = A.RELATED_EMS_CUID) AS N_RELATED_EMS_CUID,
+			       A.RELATED_EMS_CUID,
+			       (SELECT LABEL_CN FROM AN_POS WHERE CUID = trim(A.RELATED_POS_CUID)) AS N_RELATED_POS_CUID,
+			       A.RELATED_POS_CUID,
+			       (SELECT LABEL_CN FROM PTP WHERE CUID = A.RELATED_POS_PORT_CUID) AS N_RELATED_POS_PORT_CUID,
+			       A.RELATED_POS_PORT_CUID,
+			       (SELECT F.PRODUCT_MODEL FROM NE_MODEL_CFG_TYPE F WHERE F.SIGNAL_TYPE = 9 AND F.CUID = A.MODEL) AS N_MODEL,
+			       A.MODEL,
+			       (SELECT LABEL_CN FROM DEVICE_VENDOR WHERE CUID = A.RELATED_VENDOR_CUID) AS N_RELATED_VENDOR_CUID,
+             A.RELATED_VENDOR_CUID,
+             A.FTTX,
+             A.ONU_TYPE,
+             A.OWNERSHIP,
+             A.OWNERSHIP_MAN,
+             (SELECT count(a.cuid) PORT_NUMBER
+                            FROM PTP Pt
+                           WHERE Pt.RELATED_NE_CUID = A.CUID
+                             AND ( Pt.PORT_SUB_TYPE = 15 or Pt.PORT_SUB_TYPE = 29 or  Pt.PORT_SUB_TYPE = 37  ) )  PORT_NUMBER,
+             A.MAINT_PERSON,
+             A.DATA_QUALITY_PERSON,
+             A.PRESERVER,
+             A.MAINT_MODE,
+             A.DEV_IP,
+             A.LIVE_CYCLE,
+             A.SOFT_VERSION,
+             A.ACCESS_TYPE,
+             A.ONU_ID,
+             A.AUTH_TYPE,
+             decode(A.AUTH_TYPE,1,SEQNO,2,MAC_ADDR,3,PASSWORD,4,LOGICID) as SEQNO_A,
+             A.PASSWORD,
+             A.LOGICID,
+             A.MAC_ADDR,
+             A.SEQNO,
+             TO_CHAR(A.CREATE_TIME, 'yyyy-mm-dd hh24:mm:ss') AS CREATE_TIME,
+             A.RELATED_PROJECT_CUID
+             FROM AN_ONU A
+			 WHERE A.RELATED_DISTRICT_CUID LIKE '{USERDISTRICT}%'
+		]]>
+	</sql>
+	
+	<sql name="AN_POS_MANAGE" dao="IbatisResDAO">
+		<![CDATA[
+		
+      SELECT T.CUID,
+            T.LABEL_CN,
+                               (select label_cn
+                                  from district
+                                 where cuid = T.RELATED_DISTRICT_CUID and rownum=1) N_RELATED_DISTRICT_CUID,
+                               T.RELATED_DISTRICT_CUID,
+                               T.RATION,
+                               (select label_cn
+                                  from fiber_cab_gx
+                                 where cuid = T.RELATED_CAB_CUID
+                                union all
+                                select label_cn
+                                  from fiber_dp_gx
+                                 where cuid = t.related_cab_cuid and rownum=1) as N_RELATED_CAB_CUID,
+                               T.RELATED_CAB_CUID,
+                               (select label_cn
+                                  from trans_element
+                                 where cuid = T.RELATED_UPNE_CUID
+                                union all
+                                select label_cn
+                                  from an_pos
+                                 where cuid = t.RELATED_UPNE_CUID and rownum=1) as N_RELATED_UPNE_CUID,
+                               T.RELATED_UPNE_CUID,
+                               (select label_cn
+                                  from ptp
+                                 where cuid = T.RELATED_UPNE_PORT_CUID and rownum=1) as N_RELATED_UPNE_PORT_CUID,
+                               T.RELATED_UPNE_PORT_CUID,
+                               (select label_cn
+                                  from ptp
+                                 where cuid = T.RELATED_PORT2_CUID and rownum=1) as N_RELATED_PORT2_CUID,
+                               T.RELATED_PORT2_CUID,
+                               (select label_cn
+                                  from device_vendor
+                                 where cuid = T.RELATED_VENDOR_CUID and rownum=1) as N_RELATED_VENDOR_CUID,
+                               T.RELATED_VENDOR_CUID,
+                               T.OWNERSHIP,
+                               T.OWNERSHIP_MAN,
+                               T.MAINT_PERSON,
+                               T.DATA_QUALITY_PERSON,
+                               T.LIVE_CYCLE,
+                               RELATED_OLT_CUID,
+                               T.ACCESS_TYPE,
+                               T.CAN_ALLOCATE_TO_USER,
+                               to_char(T.SETUP_TIME, 'yyyy-mm-dd hh24:mm:ss') as SETUP_TIME,
+                               T.PRESERVER,
+                               T.MAINT_MODE,
+                               to_char(T.CREATE_TIME, 'yyyy-mm-dd hh24:mm:ss') AS CREATE_TIME,
+                               T.SEQNO,
+           T.RELATED_PROJECT_CUID
+      FROM AN_POS T
+       WHERE T.RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+		]]>
+	</sql>
+	
+	<sql name="ONU_PTP_MANAGE" dao="IbatisResDAO">
+		<![CDATA[
+			SELECT 'PTP' AS BM_CLASS_ID,
+			       P.CUID,
+			       (SELECT LABEL_CN FROM AN_ONU  WHERE CUID = P.RELATED_NE_CUID) AS N_RELATED_NE_CUID,
+			       P.RELATED_NE_CUID,
+			       (SELECT (SELECT D.LABEL_CN AS NAME
+	                  FROM DISTRICT D
+	                 WHERE D.CUID = AO.RELATED_DISTRICT_CUID)
+			          FROM AN_ONU AO
+			         WHERE AO.CUID = P.RELATED_NE_CUID) AS N_RELATED_DISTRICT_CUID,
+			       (SELECT C.LABEL_CN FROM CARD C WHERE C.CUID = P.RELATED_CARD_CUID) AS N_RELATED_CARD_CUID,
+			       P.RELATED_CARD_CUID,
+			       (SELECT C.FDN FROM CARD C WHERE C.CUID = P.RELATED_CARD_CUID) AS N_FDN,
+			       (select C.CARDTYPE_NAME
+			          FROM CARD_KIND C, CARD D
+			         WHERE D.MODEL = C.CUID
+			           AND D.CUID = P.RELATED_CARD_CUID) AS N_CARD_KIND_CUID,
+			       P.LABEL_CN,
+			       P.PORT_STATE,
+			       P.PORT_SUB_TYPE,
+			       P.PORT_NO,
+			       DECODE(PORT_SUB_TYPE,'16','26','34') PORT_RATE,
+			       P.PORT_TYPE,
+			       P.VLAN,
+			       (SELECT AO.RELATED_DISTRICT_CUID
+			          FROM AN_ONU AO
+			         WHERE AO.CUID = P.RELATED_NE_CUID) AS RELATED_DISTRICT_CUID,
+			       P.REMARK
+			  FROM PTP P
+			 WHERE P.DEV_TYPE = 2
+			   AND EXISTS
+			 (SELECT 1 FROM AN_ONU AO WHERE  AO.RELATED_DISTRICT_CUID LIKE '{userDistrict}%' AND  AO.CUID = P.RELATED_NE_CUID)
+			 and 1=1
+		]]>
+	</sql>
+	
+	<sql name="POS_PTP_MANAGE" dao="IbatisResDAO">
+		<![CDATA[
+			SELECT 'PTP' AS BM_CLASS_ID,
+			       P.CUID,
+			       (SELECT LABEL_CN FROM AN_POS WHERE CUID = P.RELATED_NE_CUID) AS N_RELATED_NE_CUID,
+			       P.RELATED_NE_CUID,
+			       (SELECT (SELECT D.LABEL_CN AS NAME
+	                  FROM DISTRICT D
+	                 WHERE D.CUID = AP.RELATED_DISTRICT_CUID)
+			          FROM AN_POS AP
+			         WHERE AP.CUID = P.RELATED_NE_CUID) AS N_RELATED_DISTRICT_CUID,
+             (SELECT C.LABEL_CN FROM CARD C WHERE C.CUID = P.RELATED_CARD_CUID) AS N_RELATED_CARD_CUID,
+             P.RELATED_CARD_CUID,
+             (SELECT C.FDN FROM CARD C WHERE C.CUID = P.RELATED_CARD_CUID) AS N_FDN,
+             (select C.CARDTYPE_NAME
+                FROM CARD_KIND C, CARD D
+               WHERE D.MODEL = C.CUID
+                 AND D.CUID = P.RELATED_CARD_CUID) AS N_CARD_KIND_CUID,
+             P.LABEL_CN,
+             P.PORT_STATE,
+             P.PORT_SUB_TYPE,
+             P.PORT_NO,
+             '35' PORT_RATE,
+             P.PORT_TYPE,
+             P.VLAN,
+             (SELECT AP.RELATED_DISTRICT_CUID
+                FROM AN_POS AP
+               WHERE AP.CUID = P.RELATED_NE_CUID) AS RELATED_DISTRICT_CUID,
+             P.REMARK
+        FROM PTP P
+       WHERE P.DEV_TYPE = 3
+         AND EXISTS
+       (SELECT 1 FROM AN_POS AP WHERE  AP.RELATED_DISTRICT_CUID LIKE '{userDistrict}%' AND  AP.CUID = P.RELATED_NE_CUID)
+		]]>
+	</sql>
+	
+</tpl>

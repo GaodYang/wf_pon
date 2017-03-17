@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="PROJECT">
+	<insert id="insertProject" parameterClass="com.boco.workflow.webservice.pojo.Project">
+		INSERT INTO 
+		T_WF_PROJECT 
+		( SETUP_NAME          ,
+		  SETUP_CODE         ,
+		  SETUP_REQFILE_CODE ,
+		  SETUP_REQER_NAME   ,
+		  SETUP_REQER_PHONE  ,
+		  SETUP_REQ_DATE     ,
+		  PRJ_NAME           ,
+		  PRJ_CODE           ,
+		  PRJ_CATEGORY       ,
+		  PRJ_TYPE           ,
+		  COST               ,
+		  LENGTH             ,
+		  DOMAIN_NAME        ,
+		  PRJ_DESC           ,
+		  FTP_NAME           ,
+		  PARENT_PRJ_CODE    ,
+		  CUID               ,
+		  CREATE_TIME        ,
+		  LAST_MODIFY_TIME )
+		values 
+		( #setupName#         ,
+		  #setupCode#        ,
+		  #setupReqFileCode# ,
+		  #setupReqerName#   ,
+		  #setupReqerPhone#  ,  
+		  #setupReqDate#     ,
+		  #prjName#          ,
+		  #prjCode#          ,
+		  #prjCategory#      ,
+		  #prjType#          ,
+		  #cost#             ,
+		  #length#           ,
+		  #domainName#       ,
+		  #prjDesc#          ,
+		  #ftpName#          ,
+		  #parentPrjCode#    ,
+		  #cuid#             ,
+		  sysdate            ,
+		  sysdate)
+	</insert>
+	
+	<update id="updateProjectStatus" parameterClass="com.boco.workflow.webservice.pojo.PrjStatus">
+		update T_WF_PROJECT p
+			set prj_status = #prjStatus# ,
+				username = #userName# ,
+				LAST_MODIFY_TIME = sysdate
+		where p.prj_code = #prjCode# and parent_prj_code = #parentPrjCode#
+	</update>
+	
+	<select id="queryProjectByCode" parameterClass="java.lang.String" resultClass="com.boco.core.ibatis.vo.ResultMap">
+		select 
+				 SETUP_NAME         ,
+				 SETUP_CODE         ,
+				 SETUP_REQFILE_CODE ,
+				 SETUP_REQER_NAME   ,
+				 SETUP_REQER_PHONE  ,
+				 SETUP_REQ_DATE     ,
+				 PRJ_NAME           ,
+				 PRJ_CODE           ,
+				 PRJ_CATEGORY       ,
+				 PRJ_TYPE           ,
+				 COST               ,
+				 LENGTH             ,
+				 DOMAIN_NAME        ,
+				 PRJ_DESC           ,
+				 FTP_NAME           ,
+				 PARENT_PRJ_CODE    ,
+				 CUID               ,
+				 CREATE_TIME        ,
+				 USERNAME           ,
+				 PRJ_STATUS         ,
+				 LAST_MODIFY_TIME   
+			from T_WF_PROJECT where PRJ_CODE = #prjCode#
+	</select>
+</sqlMap>

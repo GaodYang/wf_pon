@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tpl>
+	
+	<grid name="ADDRESS_MANAGE"  title="标准地址管理"  allowDisControl="true">
+		<plugins>
+			<plugin>checkbox</plugin>
+		</plugins>
+		<columns>
+		    <column dataIndex="LABEL_CN">名称</column> 
+			<column dataIndex="N_PROVINCE">省份</column> 
+			<column dataIndex="N_CITY">地市</column> 
+			<column dataIndex="N_COUNTY">区/县</column> 
+			<column dataIndex="N_TOWN">乡镇/街道办</column> 
+			<column dataIndex="COMMUNITY">社区/行政村</column> 
+			<column dataIndex="ROAD">路/巷/街</column> 
+			<column dataIndex="ROAD_NUMBER">门牌号码</column>
+			<column dataIndex="VILLAGES">小区/单位/学校/村组</column>  
+			<column dataIndex="VILLAGE_ALIAS">小区别名</column> 
+			<column dataIndex="BUILDING">楼栋号</column> 
+			<column dataIndex="UNIT_NO">单元</column>
+			<column dataIndex="FLOOR_NO">楼层</column>  
+			<column dataIndex="ROOM_NO">房号/村内编号</column> 
+			<column dataIndex="LONGITUDE">经度</column> 
+			<column dataIndex="LATITUDE">纬度</column> 
+			<column dataIndex="ABBREVIATION">地址简称</column> 
+			<column dataIndex="PINYIN">地址拼音</column> 
+			<column dataIndex="POSTCODE">邮政编码</column> 
+			<column dataIndex="REGIONTYPE1">地域属性一级分类</column> 
+			<column dataIndex="REGIONTYPE2">地域属性二级分类</column> 
+	    </columns>
+		<cm>
+			{	
+				CUID : {
+					hidden : true
+				},
+	   			LABEL_CN : {
+	    			width :450
+	    		},
+	    		REGIONTYPE1: {
+					renderer    : 'rendererREGIONTYPE1',
+				},
+	    		REGIONTYPE2: {
+					renderer    : 'rendererREGIONTYPE2',
+				}
+    		}
+   	 	</cm>
+		<sql dao="IbatisResDAO">
+           SELECT 
+          FA.CUID,/*主键CUID*/
+          FA.LABEL_CN,/*名称*/
+          FA.PROVINCE,/*1 省份*/
+          (SELECT T1.LABEL_CN 
+             FROM DISTRICT T1 
+            WHERE T1.CUID=FA.PROVINCE) AS N_PROVINCE,/*1 省份*/
+            FA.CITY,
+          (SELECT T2.LABEL_CN 
+           FROM DISTRICT T2 
+          WHERE T2.CUID=FA.CITY) AS N_CITY,/*2 地市*/
+          FA.COUNTY,
+          (SELECT T3.LABEL_CN 
+           FROM DISTRICT T3 
+          WHERE T3.CUID=FA.COUNTY) AS N_COUNTY,/*3 区县*/
+          FA.TOWN,
+          (SELECT T4.LABEL_CN
+            FROM DISTRICT T4 
+             WHERE T4.CUID=FA.TOWN) AS N_TOWN,/*4 镇乡/街道办*/
+          FA.COMMUNITY,/*5 社区/行政村*/
+          FA.ROAD,/*6 路/巷/街*/
+          FA.ROAD_NUMBER,/*7 门牌号码*/
+          FA.VILLAGES,/*8 小区/公司/单位/学校/自然村/村组*/
+          FA.VILLAGE_ALIAS,/*9 小区别名*/
+          FA.BUILDING,/*10 楼栋号*/  
+          FA.UNIT_NO,/*11 单元*/
+          FA.FLOOR_NO,/*12 楼层*/
+          FA.ROOM_NO,/*13 房号/村内编号*/
+          FA.LONGITUDE,/*经度*/
+          FA.LATITUDE,/*纬度*/
+          FA.ABBREVIATION,/*地址简称*/
+          FA.PINYIN,/*地址拼音*/
+          FA.POSTCODE,/*邮政编码*/
+          FA.RELATED_COMMUNITY_CUID,
+          FA.REGIONTYPE1, /*地域属性一级分类*/
+          FA.REGIONTYPE2, /*地域属性二级分类*/
+          (SELECT T7.LABEL_CN 
+             FROM BUSINESS_COMMUNITY T7
+            WHERE T7.CUID=FA.RELATED_COMMUNITY_CUID AND ACCESS_MODE=2) AS N_RELATED_COMMUNITY_CUID
+             FROM T_ROFH_FULL_ADDRESS FA
+          WHERE  FLAG=0 
+          AND 1=1
+       
+		</sql>
+	</grid>
+	
+	<grid name="VILLAGE_MANAGE"  title="业务区管理"  allowDisControl="true">
+		<plugins>
+			<plugin>checkbox</plugin>
+		</plugins>
+		<columns>
+		    <column dataIndex="LABEL_CN">名称</column>
+			<column dataIndex="CITY">地市</column>
+			<column dataIndex="ADDRESS">地址</column>
+			<column dataIndex="BUILDINGS_NUM">楼宇数</column>
+			<column dataIndex="UNITS_NUM">总单元数</column>
+			<column dataIndex="HOUSEHOLDS_NUM">总户数</column>
+			<column dataIndex="MAINTAIN_PERSON">维护责任人</column>
+			<column dataIndex="MAINTAIN_DEPT">维护单位</column>
+			<column dataIndex="WARNING_VALUE">预警阈值(%)</column>
+			<column dataIndex="CONTACT_NUMBER">联系电话</column>
+			<column dataIndex="CONSTRUCT_DEPT">施工单位</column>
+			<column dataIndex="IS_PRIORITY">是否重点小区</column>
+			<column dataIndex="IS_LIGHT_CHANGED">是否光改小区</column>
+			<column dataIndex="IS_OVERLAPP">是否重叠小区</column>
+			<column dataIndex="BUILD_TYPE">小区类型</column>
+			<column dataIndex="EAST_LONGITUDE">东向经度</column>
+      <column dataIndex="EAST_LATITUDE">东向纬度</column>
+      <column dataIndex="WEST_LONGITUDE">西向经度</column>
+      <column dataIndex="WEST_LATITUDE">西向纬度</column>
+      <column dataIndex="SOUTH_LONGITUDE">南向经度</column>
+      <column dataIndex="SOUTH_LATITUDE">南向纬度</column>
+      <column dataIndex="NORTH_LONGITUDE">北向经度</column>
+      <column dataIndex="NORTH_LATITUDE">北向纬度</column>
+	    </columns>
+		<cm>
+			{	
+	   			LABEL_CN : {
+	    			width :350
+	    		},
+	    		BUILD_TYPE: {
+					renderer 	: 'rendererCellType'
+				}
+    		}
+   	 	</cm>
+		<sql dao="IbatisResDAO">
+			<![CDATA[
+				SELECT LABEL_CN,
+			       (SELECT LABEL_CN FROM DISTRICT D WHERE D.CUID = BC.CITY) AS CITY,
+			       BC.CITY AS RELATED_DISTRICT_CUID,
+			       ADDRESS,
+			       BUILDINGS_NUM,
+			       UNITS_NUM,
+			       HOUSEHOLDS_NUM,
+			       MAINTAIN_PERSON,
+			       (SELECT LABEL_CN
+			          FROM T_ROFH_MAINTAIN_DEPT MD
+			         WHERE MD.CUID = BC.MAINTAIN_DEPT) AS MAINTAIN_DEPT,
+			         MAINTAIN_DEPT AS MAINTAIN_DEPT_CUID,
+			       WARNING_VALUE,
+			       CONTACT_NUMBER,
+			       (SELECT LABEL_CN
+			          FROM T_ROFH_MAINTAIN_DEPT MD
+			         WHERE MD.CUID = BC.CONSTRUCT_DEPT) CONSTRUCT_DEPT,
+			       CONSTRUCT_DEPT AS CONSTRUCT_DEPT_CUID,
+			       decode(IS_PRIORITY, '1', '是', '2', '否') AS IS_PRIORITY,
+			       decode(IS_LIGHT_CHANGED, '1', '是', '2', '否') AS IS_LIGHT_CHANGED,
+			       decode(IS_OVERLAPP, '1', '是', '2', '否') AS IS_OVERLAPP,
+			       BUILD_TYPE,
+			       CUID,
+			       EAST_LONGITUDE,
+			       EAST_LATITUDE,
+			       WEST_LONGITUDE,
+			       WEST_LATITUDE,
+			       SOUTH_LONGITUDE,
+			       SOUTH_LATITUDE,
+			       NORTH_LONGITUDE,
+			       NORTH_LATITUDE
+			  FROM BUSINESS_COMMUNITY BC where ACCESS_MODE=2
+			]]>
+		</sql>
+	</grid>
+	
+	<grid name="COVER_MANAGE"  title="覆盖范围">
+		<plugins>
+			<plugin>number</plugin>
+			<plugin>checkbox</plugin>
+		</plugins>
+		<columns>
+			<column dataIndex="NE_LABELCN">关联箱体</column>
+			<column dataIndex="ADDRLABELCN">关联标准地址</column>
+			<column dataIndex="COVER_INFO">覆盖范围描述</column>
+			<column dataIndex="COVERINFO_FULL">覆盖范围完整描述</column>
+			<column dataIndex="DEV_TYPE">覆盖设备类型</column>
+			<column dataIndex="FTTX">接入方式</column>
+			<column dataIndex="REGIONTYPE1">覆盖场景</column>
+			<column dataIndex="REGIONTYPE2">聚类场景</column>
+			<column dataIndex="USER_PTP_COUNT">使用端口数</column>
+			<column dataIndex="NOUSER_PTP_COUNT">空闲端口数</column>
+			<column dataIndex="BUSINESS_TYPE">业务类型</column>
+			<column dataIndex="REMARK">备注</column>
+		</columns>
+		<cm>
+		{	
+			NE_LABELCN:{
+				width : 250
+			},
+			ADDRLABELCN:{
+				width : 500
+			},
+			COVER_INFO:{
+				width : 550
+			},
+			COVERINFO_FULL:{
+				width : 600
+			},
+			DEV_TYPE:{
+				width : 100
+			},
+			USER_PTP_COUNT:{
+				width : 100
+			},
+			NOUSER_PTP_COUNT:{
+				width : 100
+			},
+    		REGIONTYPE1: {
+				renderer    : 'rendererREGIONTYPE1',
+			},
+    		REGIONTYPE2: {
+				renderer    : 'rendererREGIONTYPE2',
+			},
+			FTTX: {
+				renderer 	: 'fn:rendererFTTX'
+			},
+			BUSINESS_TYPE: {
+				renderer 	: 'fn:rendererBusinessType'
+			}
+		}
+		</cm>
+		<sql dao="IbatisResDAO">
+			<![CDATA[
+				select * from (
+ SELECT L.CUID, L.RELATED_NE_CUID,
+   (nvl((SELECT FTTX
+                                          FROM an_onu ONU
+                                         WHERE L.RELATED_NE_CUID =
+                                               ONU.RELATED_ACCESS_POINT and rownum=1),2)
+                                        ) AS FTTX,
+               (SELECT LABEL_CN
+                  FROM fiber_dp_gx POS
+                 WHERE L.RELATED_NE_CUID = POS.CUID
+                UNION
+                SELECT LABEL_CN
+                  FROM fiber_cab_gx ONU
+                 WHERE L.RELATED_NE_CUID = ONU.CUID
+                 ) AS NE_LABELCN,
+                TP.city  AS RELATED_DISTRICT_CUID,
+             TP.county  AS RELATED_county_CUID,
+                (select  d.label_cn from district d where  d.cuid=TP.city) AS RELATED_DISTRICT_label,
+               (select  d.label_cn from district d  where d.cuid= TP.county) AS RELATED_county_label,
+              (select label_cn from business_community bc where  bc.cuid =  TP.RELATED_COMMUNITY_CUID)       AS RELATED_community_label,
+               STANDARD_ADDR,
+               BUSINESS_TYPE,
+                TP.LABEL_CN   AS ADDRLABELCN,
+                  CASE WHEN  (SELECT COUNT(*) FROM fiber_cab_gx WHERE CUID=L.RELATED_NE_CUID and device_type=1 )=1
+               THEN  '光交接箱'
+             WHEN (SELECT COUNT(*) FROM fiber_dp_gx WHERE CUID=L.RELATED_NE_CUID )=1
+               THEN '光分纤箱'
+               WHEN (SELECT COUNT(*) FROM fiber_cab_gx WHERE CUID=L.RELATED_NE_CUID and device_type=2 )=1
+               then '多媒体箱'
+             ELSE 
+               ''
+             END dev_type,
+             decode((select count(*)
+                                 from  cover_to_port where related_access_point=L.RELATED_NE_CUID
+                                 and port_state=1),0,
+                                 nvl(least((select nf.fiber_count-(select count(*) from t_sf_rofh_product ts,gpon_cover gc where ts.related_coverage_addr_cuid=gc.standard_addr
+                     and gc.related_ne_cuid=L.related_ne_cuid) 
+                                 from nm_fiber_ab_port nf  where nf.fiber_dp_cuid=L.related_ne_cuid and rownum=1
+                               ),(select count(*) from nm_fiber_ab_port nf where nf.fiber_dp_cuid=L.related_ne_cuid and nf.PORT_STATE=1 )),0),
+                       (select  count(*)
+                                 from  cover_to_port where related_access_point=L.RELATED_NE_CUID
+                                 and port_state=1  ) )           
+                                  NOUSER_PTP_COUNT,
+             decode(
+                 (select count(*) from  cover_to_port where related_access_point=L.RELATED_NE_CUID and port_state=2 )
+                     ,0,
+                    ( select count(*) from t_sf_rofh_product ts,gpon_cover gc where ts.related_coverage_addr_cuid=gc.standard_addr
+                     and gc.related_ne_cuid=L.related_ne_cuid ),
+                     
+                    (select count(*) from  cover_to_port where related_access_point=L.RELATED_NE_CUID and port_state=2  )
+                                  )   USER_PTP_COUNT,
+                           L.COVER_INFO,L.REMARK,L.REGIONTYPE1,L.REGIONTYPE2
+          FROM GPON_COVER L ,t_rofh_full_address TP where L.standard_addr=TP.cuid              
+) tt
+ WHERE TT.RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+			]]>
+		</sql>
+		<note>
+			覆盖范围
+		</note>
+	</grid>
+	
+</tpl>

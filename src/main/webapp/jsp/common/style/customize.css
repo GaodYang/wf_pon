@@ -1,0 +1,128 @@
+
+.add{
+        background-image: url(../images/add_obj.gif) !important;
+}
+.delete{
+        background-image: url(../images/delete_obj.gif) !important;
+}
+.modify{
+        background-image: url(../images/user_define.png) !important;
+}
+.recovery{
+        background-image: url(../images/remove.gif) !important;
+}
+.bind{
+        background-image: url(../images/bind_port.png) !important;
+}
+.split{
+        background-image: url(../images/split_subnet.png) !important;
+}
+.union{
+        background-image: url(../images/union_subnet.png) !important;
+}
+.expand{
+        background-image: url(../images/expand.gif) !important;
+}
+.cancel{
+        background-image: url(../images/cancel.png) !important;
+}
+.assign{
+        background-image: url(../images/Ip_edit.png) !important;
+}
+.import{
+        background-image: url(../images/doImport.png) !important;
+}
+.export{
+        background-image: url(../images/doExport.png) !important;
+}
+.upload{
+        background-image: url(../images/upload.gif) !important;
+}
+.query{
+	  background-image: url(../images/query.gif) !important;
+}
+.no-icon{
+	width:0px !important;
+	height:0px !important;
+}
+/*分配互联IP*/
+.allocate_interconnect_ip{
+        background-image: url(../images/allocate_interconnect_ip.png) !important;
+}
+/*分配端口*/
+.allocate_port{
+        background-image: url(../images/allocate_port.png) !important;
+}
+/*分配资源*/
+.allocate_resource{
+        background-image: url(../images/allocate_resource.png) !important;
+}
+/*分配业务IP*/
+.allocate_service_ip{
+        background-image: url(../images/allocate_service_ip.png) !important;
+}
+/*授权*/
+.authorize{
+        background-image: url(../images/authorize.png) !important;
+}
+/*规划*/
+.plan{
+        background-image: url(../images/plan.png) !important;
+}
+/*回收授权*/
+.recycle_authority{
+        background-image: url(../images/recycle_authority.png) !important;
+}
+/*回收IP*/
+.recycle_ip{
+        background-image: url(../images/recycle_ip.png) !important;
+}
+/*关联传输链路*/
+.relate_trans_link{
+        background-image: url(../images/relate_trans_link.png) !important;
+}
+/*业务路由发布协议*/
+.route_protocol{
+        background-image: url(../images/route_protocol.png) !important;
+}
+/*保存子网*/
+.save_subnet{
+        background-image: url(../images/save_subnet.png) !important;
+}
+/*打散IP*/
+.scatter_ip{
+        background-image: url(../images/scatter_ip.png) !important;
+}
+/*拆分子网*/
+.split_subnet{
+        background-image: url(../images/split_subnet.png) !important;
+}
+/*子网码号树*/
+.subnet_tree{
+        background-image: url(../images/subnet_tree.png) !important;
+}
+/*查看详情*/
+.view_detail{
+        background-image: url(../images/view_detail.png) !important;
+}
+/*查看拆分结果*/
+.view_split_result{
+        background-image: url(../images/view_split_result.png) !important;
+}
+.minus{
+        background-image: url(../images/minus.jpg) !important;
+}
+.plus{
+        background-image: url(../images/plus.jpg) !important;
+}
+.refresh{
+        background-image: url(../images/refresh.jpg) !important;
+}
+/*树节点 IP地址*/
+.node_ip{
+        background-image: url(../images/node_ip.png) !important;
+}
+/*树节点 子网*/
+.node_subnet{
+        background-image: url(../images/node_subnet.png) !important;
+}

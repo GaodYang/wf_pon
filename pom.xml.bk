@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>com.boco</groupId>
+    <artifactId>irms.parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>irms.app.workflow.pon</artifactId>
+  <packaging>war</packaging>
+  <name>irms.app.workflow.pon</name>
+  
+  <dependencies> 
+
+  	<dependency>
+  		<groupId>com.boco</groupId>
+  		<artifactId>irms.platform.frame</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	
+	<!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+	<dependency>
+	    <groupId>com.thoughtworks.xstream</groupId>
+	    <artifactId>xstream</artifactId>
+	    <version>1.4.9</version>
+	</dependency>
+  </dependencies>
+ 
+  <build>  
+	<pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.m2e</groupId>
+				<artifactId>lifecycle-mapping</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<lifecycleMappingMetadata>
+						<pluginExecutions>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-dependency-plugin</artifactId>
+									<versionRange>[2.0,)</versionRange>
+									<goals>
+										<goal>copy-dependencies</goal>
+										<goal>unpack</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<ignore />
+								</action>
+							</pluginExecution>
+						</pluginExecutions>
+					</lifecycleMappingMetadata>
+				</configuration>
+			</plugin>
+		</plugins>
+	</pluginManagement>
+		
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-dependency-plugin</artifactId>
+			<version>2.8</version>
+			<executions>
+				<execution>
+					<id>copy-dependencies</id>
+					<phase>compile</phase>
+					<goals>
+						<goal>copy-dependencies</goal>
+					</goals>
+					<configuration>
+						<outputDirectory>src/main/webapp/WEB-INF/lib</outputDirectory>
+						<overWriteReleases>false</overWriteReleases>
+						<overWriteSnapshots>false</overWriteSnapshots>
+						<overWriteIfNewer>true</overWriteIfNewer>
+						<excludeArtifactIds>
+						</excludeArtifactIds>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+		<plugin>
+			<artifactId>maven-clean-plugin</artifactId>
+			<version>2.5</version>
+			<configuration>
+				<filesets>
+					<fileset>
+						<directory>src/main/webapp/WEB-INF/lib</directory>
+						<includes>
+							<include>**/*.*</include>
+						</includes>
+						<followSymlinks>false</followSymlinks>
+					</fileset>
+				</filesets>
+				<failOnError>false</failOnError>
+			</configuration>
+		</plugin>
+		<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <configuration>
+				<warName>${project.artifactId}</warName>
+				<webResources>	            
+		        </webResources>
+		        <warSourceDirectory>src/main/webapp</warSourceDirectory>
+		        <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+            </configuration>
+        </plugin>
+		
+	</plugins>
+  </build>
+  
+</project>

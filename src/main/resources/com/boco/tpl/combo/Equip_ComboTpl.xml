@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tpl>
+	<combo name="PORTSTATE">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS CUID,'未知'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '1' AS CUID,'空闲'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '2' AS CUID,'占用'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'预占用' AS LABEL_CN FROM dual
+			union all
+			SELECT '4' AS CUID,'坏端口'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '5' AS CUID,'保留'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="OPERATINGSTATE">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,'在线'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '2' AS CUID,'不在线'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'测试' AS LABEL_CN FROM dual
+		</sql>
+	</combo>
+	<combo name="OWNERMENSHIP">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,'移动'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '2' AS CUID,'联通'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'电信'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '4' AS CUID,'铁通' AS LABEL_CN FROM dual
+			union all
+			SELECT '5' AS CUID,'广电'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '6' AS CUID,'政府'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '7' AS CUID,'客户自有'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '8' AS CUID,'物业'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '9' AS CUID,'其它'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="OWNERSHIP_NM">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,'移动'  AS LABEL_CN	FROM dual 
+			union all
+			SELECT '101' AS CUID,'铁通'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '2' AS CUID,'第三方'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="OWNERSHIP">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS CUID,'未知'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '1' AS CUID,'自建'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '2' AS CUID,'共建'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'合建'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '4' AS CUID,'租用'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '5' AS CUID,'购买'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '6' AS CUID,'置换'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	
+	<combo name="EMS_OWNERSHIP_COMBOX">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS CUID,'未知'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '1' AS CUID,'移动自建'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '2' AS CUID,'共建'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	
+	<combo name="ALLVENDOR">
+		<sql dao="IbatisResDAO">
+			SELECT T.CUID,T.LABEL_CN FROM DEVICE_VENDOR T WHERE T.CUID IN(SELECT RELATED_VENDOR_CUID FROM NMS_SYSTEM WHERE EMS_TYPES LIKE '%9%') 
+			ORDER BY NLSSORT(LABEL_CN, 'NLS_SORT=SCHINESE_PINYIN_M')
+		</sql>
+	</combo>
+	<combo name="TROFHFULLADDRESS">
+		<sql dao="IbatisResDAO">
+			SELECT T.LABEL_CN CUID,T.LABEL_CN FROM T_ROFH_FULL_ADDRESS T
+		</sql>
+	</combo>
+	<combo name="OLTVLAN">
+		<sql dao="IbatisResDAO">
+			SELECT T.CURNUM CUID,T.CURNUM LABEL_CN FROM T_LOGIC_VLAN T
+		</sql>
+	</combo>
+	<combo name="ONUVLAN">
+		<sql dao="IbatisResDAO">
+			SELECT T.IN_VLAN_ID CUID,T.IN_VLAN_ID LABEL_CN FROM T_LOGIC_IN_VLAN T
+		</sql>
+	</combo>
+	<combo name="PROJECTSTATE">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS CUID,'正常'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '1' AS CUID,'新增'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '2' AS CUID,'修改'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'删除'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="IFCONTRAL">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS CUID,'不可管理' AS LABEL_CN FROM dual
+			union all
+			SELECT '1' AS CUID,'可管理' AS LABEL_CN FROM dual
+		</sql>
+	</combo>
+	<combo name="LIVECYCLE">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,'在用'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '2' AS CUID,'工程'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'退网' AS LABEL_CN FROM dual
+		</sql>
+	</combo>
+	<combo name="SIGNALTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '9' CUID,
+			'PON' LABEL_CN
+			FROM dual
+		</sql>
+	</combo>
+	<combo name="MODEL">
+		<sql dao="IbatisResDAO">
+			SELECT CUID,PRODUCT_MODEL AS LABEL_CN,upper(PRODUCT_MODEL) AS UPPER_NAME, VENDOR_NAME FROM
+			NE_MODEL_CFG_TYPE WHERE SIGNAL_TYPE = 9 AND CFG_TYPE=1 ORDER BY NLSSORT(LABEL_CN, 'NLS_SORT=SCHINESE_PINYIN_M')
+		</sql>
+	</combo>
+	<combo name="MODEL_POS">
+		<sql dao="IbatisResDAO">
+			SELECT CUID,PRODUCT_MODEL AS LABEL_CN,upper(PRODUCT_MODEL) AS UPPER_NAME, VENDOR_NAME FROM
+			NE_MODEL_CFG_TYPE WHERE SIGNAL_TYPE = 9 AND CFG_TYPE=3 ORDER BY NLSSORT(LABEL_CN, 'NLS_SORT=SCHINESE_PINYIN_M')
+		</sql>
+	</combo>
+	<combo name="MODEL_ONU">
+		<sql dao="IbatisResDAO">
+			SELECT CUID,PRODUCT_MODEL AS LABEL_CN,upper(PRODUCT_MODEL) AS UPPER_NAME, VENDOR_NAME FROM
+			NE_MODEL_CFG_TYPE WHERE SIGNAL_TYPE = 9 AND CFG_TYPE=2 ORDER BY NLSSORT(LABEL_CN, 'NLS_SORT=SCHINESE_PINYIN_M')
+		</sql>
+	</combo>
+	<combo name="CARDKIND">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS CUID,'未知'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'控制盘'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '6' AS CUID,'电源盘' AS LABEL_CN FROM dual
+			union all
+			SELECT '7' AS CUID,'时钟盘' AS LABEL_CN FROM dual
+			union all
+			SELECT '19' AS CUID,'OLT上联盘' AS LABEL_CN FROM dual
+			union all
+			SELECT '20' AS CUID,'OLT支路盘' AS LABEL_CN FROM dual
+			union all
+			SELECT '22' AS CUID,'ONU上联盘' AS LABEL_CN FROM dual
+			union all
+			SELECT '23' AS CUID,'ONU下联盘' AS LABEL_CN FROM dual
+		</sql>
+	</combo>
+	<combo name="PORTTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '0'	AS CUID,'未知' AS LABEL_CN FROM dual
+			union all
+			SELECT '1'	AS CUID,'电口' AS LABEL_CN FROM dual
+			union all
+			SELECT '2'	AS CUID,'光口' AS LABEL_CN FROM dual
+			union all
+			SELECT '4' AS CUID,'逻辑口'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="OLTPORTSUBTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS CUID,'未知' AS LABEL_CN FROM dual
+			union all
+			SELECT '9' AS CUID,'GPON口' AS LABEL_CN FROM dual
+			union all
+			SELECT '10'	AS CUID,'EPON口' AS LABEL_CN FROM dual
+			union all
+			SELECT '11'	AS CUID,'OLT上联口' AS LABEL_CN FROM dual
+			union all
+			SELECT '33'	AS CUID,'光GE口' AS LABEL_CN FROM dual
+			union all
+			SELECT '36'	AS CUID,'电GE口' AS LABEL_CN FROM dual
+			union all
+			SELECT '37'	AS CUID,'电FE口' AS LABEL_CN FROM dual
+		</sql>
+	</combo>
+	<combo name="ONUPORTSUBTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS CUID,'未知' AS LABEL_CN FROM dual
+			union all
+			SELECT '14'	AS CUID,'ONU上联口' AS LABEL_CN FROM dual
+			union all
+			SELECT '15'	AS CUID,'FE' AS LABEL_CN FROM dual
+			union all
+			SELECT '16'	AS CUID,'POTS' AS LABEL_CN FROM dual
+			union all
+			SELECT '23'	AS CUID,'ADSL' AS LABEL_CN FROM dual
+			union all
+			SELECT '24'	AS CUID,'ADSL2_PLUS' AS LABEL_CN FROM dual
+			union all
+			SELECT '26' AS CUID,'SHDSL'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '27' AS CUID,'VDSL2'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '29' AS CUID,'ETH'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '30'	AS CUID,'PSTN' AS LABEL_CN FROM dual
+			union all
+			SELECT '33'	AS CUID,'光GE口' AS LABEL_CN FROM dual
+			union all
+			SELECT '36'	AS CUID,'电GE口' AS LABEL_CN FROM dual
+			union all
+			SELECT '37'	AS CUID,'电FE口' AS LABEL_CN FROM dual
+		</sql>
+	</combo>
+	<combo name="ONUPORTTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '15'	AS CUID,'FE' AS LABEL_CN FROM dual
+			union all
+			SELECT '16'	AS CUID,'POTS' AS LABEL_CN FROM dual
+		</sql>
+	</combo>
+	<combo name="POSPORTSUBTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS CUID,'未知' AS LABEL_CN FROM dual
+			union all
+			SELECT '12' AS CUID,'分光器上联口'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '13' AS CUID,'分光器下联口'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="AUTHTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,'SN' AS LABEL_CN FROM dual
+			union all
+			SELECT '2'	AS CUID,'MAC'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'PASSWORD'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '4' AS CUID,'LOGICID'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="FTTX">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,'FTTB'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '2' AS CUID,'FTTH'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'LAN'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '4' AS CUID,'无线'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="ACCESSTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,'集客' AS LABEL_CN FROM dual
+			union all
+			SELECT '2' AS CUID,'家客'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '3' AS CUID,'集客/家客共用'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '4' AS CUID,'其他'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="ONUTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,'MDU' AS LABEL_CN FROM dual
+			union all
+			SELECT '3' AS CUID,'HGU' AS LABEL_CN FROM dual
+			union all
+			SELECT '4' AS CUID,'SFU' AS LABEL_CN FROM dual
+			union all
+			SELECT '0' AS CUID,'未知'  AS LABEL_CN FROM dual
+		</sql>
+	</combo>
+<!-- 			union all -->
+<!-- 			SELECT '2' AS CUID,'ONT' AS LABEL_CN FROM dual -->
+<!-- 			union all -->
+<!-- 			SELECT '5' AS CUID,'SBU' AS LABEL_CN FROM dual -->
+<!-- 			union all -->
+<!-- 			SELECT '6' AS CUID,'MTU' AS LABEL_CN FROM dual -->
+	<combo name="ONUTYPE_NM">
+		<sql dao="IbatisResDAO">
+			SELECT KEY_NUM AS CUID,KEY_VALUE AS LABEL_CN FROM PUBLIC_ENUM where ENUM_TYPE='NM_ONU_TYPE'
+		</sql>
+	</combo>
+	<combo name="USESTATE">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,'服务中' AS LABEL_CN FROM dual
+			union all
+			SELECT '2' AS CUID,'维护中' AS LABEL_CN FROM dual
+			union all
+			SELECT '3' AS CUID,'损坏'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '4' AS CUID,'未知'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	<combo name="ISPERMITSYSDEL">
+		<sql dao="IbatisResDAO">
+			SELECT '0'  AS CUID,'不允许'  AS LABEL_CN FROM dual
+			union all
+			SELECT '1'  AS CUID,'允许'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+
+	<combo name="VOICE_INFO">
+		<sql dao="IbatisResDAO">
+			SELECT '1' AS CUID,' ' AS LABEL_CN FROM dual
+			union all
+			SELECT 'ding' AS CUID,	'ding' AS LABEL_CN FROM dual
+			union all
+			SELECT 'whistle' AS CUID,'whistle' AS LABEL_CN FROM dual
+			union all
+			SELECT 'announcing' AS CUID,'announcing'  AS LABEL_CN FROM	dual
+			union all
+			SELECT 'buzz' AS CUID,'buzz' AS LABEL_CN FROM dual
+			union all
+			SELECT 'larum' AS CUID,'larum' AS LABEL_CN FROM dual
+			union all
+			SELECT 'alert'	AS CUID,'alert' AS LABEL_CN FROM dual
+			union all
+			SELECT 'mail' AS CUID,'mail' AS LABEL_CN FROM dual
+			union all
+			SELECT 'nudge' AS CUID,'nudge' AS LABEL_CN FROM dual
+			union all
+			SELECT 'online' AS CUID,'online' AS LABEL_CN FROM dual
+			union all
+			SELECT 'ring' AS CUID,'ring' AS LABEL_CN FROM dual
+			union all
+			SELECT 'type' AS CUID,'type' AS LABEL_CN FROM dual
+			union all
+			SELECT 'vimdone' AS CUID,'vimdone' AS LABEL_CN FROM dual
+		</sql>
+	</combo>
+	
+	<!-- 画面按照EMS的名称进行查询时使用 -->
+	<combo name="EUIIP_EMS_NAME">
+		<sql dao="IbatisResDAO">
+			SELECT S.LABEL_CN AS CUID,S.LABEL_CN,'NMS_SYSTEM' AS BM_CLASS_ID FROM NMS_SYSTEM S
+			WHERE S.RELATED_SPACE_CUID LIKE '{userDistrict}%' AND S.EMS_TYPES LIKE '%9%'
+			ORDER BY S.LABEL_CN
+		</sql>
+	</combo> 
+	 
+	<combo name="EUIIP_EMS">
+		<sql dao="IbatisResDAO">
+			SELECT S.CUID,S.LABEL_CN,'NMS_SYSTEM' AS BM_CLASS_ID FROM NMS_SYSTEM S
+			WHERE S.RELATED_SPACE_CUID LIKE '{userDistrict}%' AND S.EMS_TYPES LIKE '%9%'
+			ORDER BY S.LABEL_CN
+		</sql>
+	</combo> 
+	
+	<combo name="EUIIP_EMS_NOCONTAINSPACE">
+		<sql dao="IbatisResDAO">
+			SELECT S.CUID,S.LABEL_CN,'NMS_SYSTEM' AS BM_CLASS_ID FROM NMS_SYSTEM S
+			WHERE S.EMS_TYPES LIKE '%9%'
+			ORDER BY S.LABEL_CN
+		</sql>
+	</combo> 
+	
+	<combo name="DEV_MAINTAIN">
+		<sql dao="IbatisResDAO">
+			SELECT  S.LABEL_CN AS CUID,S.LABEL_CN  FROM T_EXT_RADIO_MAINTAIN S
+      			ORDER BY S.LABEL_CN
+		</sql>
+	</combo> 
+	
+	<combo name="ACCESSPOINT">
+		<sql dao="IbatisResDAO">
+	SELECT pos.CUID, pos.LABEL_CN
+   FROM fiber_dp_gx POS WHERE RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+			UNION ALL
+			SELECT ONU.CUID, ONU.LABEL_CN
+			  FROM fiber_cab_gx ONU
+			 WHERE RELATED_DISTRICT_CUID LIKE '{userDistrict}%' 
+		</sql>
+	</combo>
+	
+	<combo name="OLT_SELECT_QUERY">
+		<sql dao="IbatisResDAO">
+			SELECT T.CUID,T.LABEL_CN FROM TRANS_ELEMENT T WHERE T.SIGNAL_TYPE=9 AND T.CONFIG_TYPE=1 AND T.RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+			UNION ALL
+			SELECT T.CUID,T.DEV_IP AS LABEL_CN FROM TRANS_ELEMENT T WHERE T.SIGNAL_TYPE=9 AND T.CONFIG_TYPE=1 AND T.RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+		</sql>
+	</combo>
+	<combo name="OLT_SELECT_QUERY_OLTTOBARS">
+		<sql dao="IbatisResDAO">
+			SELECT CUID AS CUID,OLT_IP AS LABEL_CN FROM AN_OLT_TO_BRAS
+		</sql>
+	</combo>
+	<combo name="RELATED_POS_NAME">
+		<sql dao="IbatisResDAO">
+			(SELECT CUID,LABEL_CN,RELATED_OLT_CUID FROM AN_POS WHERE RELATED_DISTRICT_CUID LIKE '{USERDISTRICT}%') UNION (SELECT A.CUID,A.LABEL_CN,Z.RELATED_OLT_CUID FROM AN_POS A,AN_POS Z WHERE A.RELATED_OLT_CUID=Z.CUID AND A.RELATED_DISTRICT_CUID LIKE '{USERDISTRICT}%')
+		</sql>
+	</combo>
+	<combo name="RELATED_OLT_NAME">
+		<sql dao="IbatisResDAO">
+			(SELECT CUID, LABEL_CN
+   FROM TRANS_ELEMENT
+  WHERE RELATED_DISTRICT_CUID LIKE '{USERDISTRICT}%')
+UNION
+(SELECT Z.CUID, Z.LABEL_CN
+   FROM AN_POS A, AN_POS Z
+  WHERE A.RELATED_OLT_CUID = Z.CUID
+    AND Z.RELATED_DISTRICT_CUID LIKE '{USERDISTRICT}%')
+		</sql>
+	</combo>
+	<combo name="RELATED_OLT_PORT_CUID">
+		<sql dao="IbatisResDAO">
+			SELECT CUID,LABEL_CN,RELATED_NE_CUID FROM PTP WHERE RELATED_DISTRICT_CUID LIKE '{USERDISTRICT}%'
+		</sql>
+	</combo>
+	<combo name="RELATED_POS_PORT_CUID">
+		<sql dao="IbatisResDAO">
+			SELECT CUID,LABEL_CN,RELATED_NE_CUID FROM PTP WHERE RELATED_DISTRICT_CUID LIKE '{USERDISTRICT}%'
+		</sql>
+	</combo>
+	<combo name="ONU_SELECT_QUERY">
+		<sql dao="IbatisResDAO">
+			SELECT T.CUID,T.LABEL_CN FROM AN_ONU T WHERE T.RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+			UNION ALL
+			SELECT T.CUID,T.DEV_IP AS LABEL_CN FROM AN_ONU T WHERE T.RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+		</sql>
+	</combo>
+	<combo name="RELATED_POS_DOWN_PTP">
+		<sql dao="IbatisResDAO">
+			SELECT P.LABEL_CN,
+			       P.CUID,
+			       RELATED_NE_CUID
+			  FROM PTP P
+			 WHERE P.PORT_SUB_TYPE = 13
+			 and P.PORT_STATE=1
+		</sql>
+	</combo>
+	<combo name="RELATED_PORT_NAME">
+		<sql dao="IbatisResDAO">
+			SELECT T.CUID, T.LABEL_CN, T.RELATED_NE_CUID
+			  FROM PTP T
+			 WHERE T.PORT_SUB_TYPE NOT IN (11,12) 
+			 and T.PORT_STATE = 1 
+		</sql>
+	</combo>
+	<combo name="RELATED_CARD_NAME">
+		<sql dao="IbatisResDAO">
+			SELECT T.CUID,T.LABEL_CN,T.RELATED_DEVICE_CUID FROM CARD T
+		</sql>
+	</combo>
+	
+	<combo name="DISTRICT_NAME_INCLODE_PROVINCE">
+		<sql dao="IbatisResDAO">
+			SELECT LABEL_CN,CUID FROM DISTRICT S WHERE (CUID LIKE '{userDistrict}%' AND DATA_TYPE 	IN(2,3) )OR CUID ='{userDistrict}'  ORDER BY LABEL_CN
+		</sql>
+	</combo>
+	
+	<combo name="DISTRICT_NAME">
+		<sql dao="IbatisResDAO">
+			SELECT LABEL_CN,CUID FROM DISTRICT S WHERE (CUID LIKE '{userDistrict}%' AND DATA_TYPE=3 )OR CUID ='{userDistrict}'  ORDER BY LABEL_CN
+		</sql>
+	</combo>
+	<combo name="DISTRICT_LABEL_CN">
+		<sql dao="IbatisResDAO">
+			SELECT LABEL_CN,LABEL_CN AS CUID FROM DISTRICT S WHERE (CUID LIKE '{userDistrict}%' AND DATA_TYPE=3 ) ORDER BY LABEL_CN
+		</sql>
+	</combo>
+	<combo name="DISTRICT_LABEL_CN_CUID">
+		<sql dao="IbatisResDAO">
+			SELECT LABEL_CN,CUID FROM DISTRICT S WHERE (CUID LIKE '{userDistrict}%' AND DATA_TYPE=3 ) ORDER BY LABEL_CN
+		</sql>
+	</combo>
+	
+	<combo name="DISTRICT_NAME_NM">
+        <sql dao="IbatisResDAO">
+            SELECT LABEL_CN,CUID FROM DISTRICT S WHERE (CUID LIKE '{userDistrict}%' AND DATA_TYPE IN (3,4) )OR CUID ='{userDistrict}'  ORDER BY LABEL_CN
+        </sql>
+    </combo>
+	<combo name="DISTRICT_NAME_BYCUID">
+		<sql dao="IbatisResDAO">
+			SELECT LABEL_CN,CUID FROM DISTRICT S WHERE (CUID LIKE '{userDistrict}%' AND DATA_TYPE=3 )OR CUID ='{userDistrict}'  ORDER BY CUID
+		</sql>
+	</combo>
+	
+	<combo name="DISTRICT_NAME_OLTTOBRAS">
+		<sql dao="IbatisResDAO">
+			SELECT LABEL_CN,CUID FROM DISTRICT S WHERE DATA_TYPE=3  ORDER BY LABEL_CN
+		</sql>
+	</combo>
+	<combo name="COMBO_DISTRICT_NAME">
+		<sql dao="IbatisResDAO">
+			SELECT LABEL_CN,LABEL_CN AS CUID FROM DISTRICT S WHERE (CUID LIKE '{userDistrict}%' AND DATA_TYPE=3) OR CUID ='{userDistrict}'  ORDER BY LABEL_CN
+		</sql>
+	</combo>
+	
+	<combo name="PON_EMS_QUERY">
+		<sql dao="IbatisResDAO">
+			SELECT LABEL_CN,CUID FROM NMS_SYSTEM WHERE EMS_TYPES LIKE '%9%' AND RELATED_SPACE_CUID LIKE '{userDistrict}%' ORDER BY LABEL_CN
+		</sql>
+	</combo>
+	<combo name="PORTSUBTYPE">
+		<sql dao="IbatisResDAO">
+			SELECT '0' AS cuid, '未知' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '3' AS cuid, 'MSTP口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '5' AS cuid, '中频口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '6' AS cuid, '射频口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '7' AS cuid, 'IMA口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '8' AS cuid, 'LAG口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '9' AS cuid, 'GPON口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '10' AS cuid, 'EPON口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '11' AS cuid, 'OLT上联口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '12' AS cuid, '分光器上联口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '13' AS cuid, '分光器下联口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '14' AS cuid, 'ONU上联口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '15' AS cuid, 'FE' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '16' AS cuid, 'POTS' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '21' AS cuid, 'SDH' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '22' AS cuid, 'PDH' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '23' AS cuid, 'ADSL' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '24' AS cuid, 'ADSL2_PLUS' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '25' AS cuid, 'POS' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '26' AS cuid, 'SHDSL' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '27' AS cuid, 'VDSL2' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '28' AS cuid, 'ATM' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '29' AS cuid, 'ETH' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '30' AS cuid, 'PSTN' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '31' AS cuid, '波分口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '32' AS cuid, 'PTN口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '33' AS cuid, '光GE口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '36' AS cuid, '电GE口' AS label_cn
+			  FROM DUAL
+			UNION ALL
+			SELECT '37' AS cuid, '电FE口' AS label_cn
+			  FROM DUAL
+		</sql>
+	</combo>
+	<combo name="PORTRATE">
+		<sql dao="IbatisResDAO">
+		 SELECT  '1' AS CUID, '2M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '2' AS CUID, '8M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '3' AS CUID, '10M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '4' AS CUID, '34M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '5' AS CUID, '45M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '6' AS CUID, '68M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '7' AS CUID, '100M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '8' AS CUID, '140M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '9' AS CUID, '155M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '10' AS CUID, '280M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '11' AS CUID, '310M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '12' AS CUID, '565M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '13' AS CUID, '622M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '14' AS CUID, '1G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '15' AS CUID, '1.25G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '16' AS CUID, '2.5G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '17' AS CUID, '10G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '18' AS CUID, '20G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '19' AS CUID, '40G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '20' AS CUID, '80G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '21' AS CUID, '120G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '22' AS CUID, '6M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '23' AS CUID, '12M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '24' AS CUID, '16M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '25' AS CUID, '4M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '26' AS CUID, '64k' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '27' AS CUID, 'NA' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '28' AS CUID, '3.5G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '29' AS CUID, '320G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '30' AS CUID, '400G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '31' AS CUID, '800G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '32' AS CUID, '1600G' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '33' AS CUID, '32M' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '34' AS CUID, 'FE' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '35' AS CUID, 'GE' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '36' AS CUID, '10GE' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '37' AS CUID, 'FC100' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '38' AS CUID, 'FC200' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '39' AS CUID, 'FC400' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '40' AS CUID, 'FC800' AS LABEL_CN FROM dual 
+		 union all
+		  SELECT  '48' AS CUID, '20M' AS LABEL_CN FROM dual 
+		</sql>
+	</combo>
+	<combo name="COVERUSER">
+		<sql dao="IbatisResDAO">
+			SELECT '[0]' AS CUID,'是'  AS LABEL_CN	FROM dual
+			union all
+			SELECT '%[0]' AS CUID,'否'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	
+	<combo name="RELATEDSITE">
+        <sql dao="IbatisResDAO">
+            SELECT LABEL_CN, CUID,RELATED_SPACE_CUID FROM SITE WHERE RELATED_SPACE_CUID  LIKE '{userDistrict}%' ORDER BY LABEL_CN
+        </sql>
+    </combo>
+    <combo name="COMBO_RELATED_ROOM">
+        <sql dao="IbatisResDAO">
+            SELECT LABEL_CN,
+                       CUID,
+                       RELATED_SPACE_CUID
+                  FROM ROOM
+                 WHERE RELATED_SPACE_CUID LIKE '{userDistrict}%'
+        </sql>
+    </combo>
+     <combo name="COMBO_RELATED_RACK">
+        <sql dao="IbatisResDAO">
+            SELECT LABEL_CN,
+                       CUID,
+                       RELATED_ROOM_CUID
+                  FROM T_PHY_SHELFRACK_UNIT
+        </sql>
+    </combo>
+    <combo name="RELATEDROOM">
+        <sql dao="IbatisResDAO">
+            SELECT LABEL_CN,
+                       CUID,
+                       RELATED_SPACE_CUID
+                  FROM ROOM
+                 WHERE RELATED_SPACE_CUID IN
+                       (SELECT CUID
+                          FROM SITE
+                         WHERE RELATED_SPACE_CUID LIKE '{userDistrict}%')
+        </sql>
+    </combo>
+    
+    <combo name="VLANMODEL">
+		<sql dao="IbatisResDAO">
+			SELECT '0'	AS CUID,'transparent' AS LABEL_CN FROM dual
+			union all
+			SELECT '1'	AS CUID,'tag' AS LABEL_CN FROM dual
+			union all
+			SELECT '2'	AS CUID,'translation' AS LABEL_CN FROM dual
+			union all
+			SELECT '4' AS CUID,'trunk'  AS LABEL_CN	FROM dual
+		</sql>
+	</combo>
+	
+	 <combo name="CARDMODEL">
+		<sql dao="IbatisResDAO">
+			SELECT CUID ,cardtype_name LABEL_CN FROM  card_kind 
+		</sql>
+	</combo>
+	
+	<combo name="OLTVLANMODEL">
+        <sql dao="IbatisResDAO">
+            SELECT '0'  AS CUID,'transparent' AS LABEL_CN FROM dual
+            union all
+            SELECT '1'  AS CUID,'tag' AS LABEL_CN FROM dual
+            union all
+            SELECT '4' AS CUID,'trunk'  AS LABEL_CN FROM dual
+        </sql>
+    </combo>
+    <!-- OLT管理  所属区域 下拉自动补全 SQL -->
+	
+	<combo name="GETDISTRICTTREENODES">
+		<sql dao="IbatisResDAO">
+			SELECT CUID,LABEL_CN,DATA_TYPE,RELATED_SPACE_CUID FROM DISTRICT WHERE CUID LIKE  '{userDistrict}%' ORDER BY CUID ASC 
+		</sql>
+	</combo>
+    
+    <combo name="GPONCOVERNE">
+    	<sql dao="IbatisResDAO">
+    		SELECT POS.CUID,POS.LABEL_CN FROM GPON_COVER A ,AN_POS POS WHERE A.RELATED_NE_CUID = POS.CUID
+    		UNION
+    		SELECT ONU.CUID,ONU.LABEL_CN FROM GPON_COVER A ,AN_ONU ONU WHERE A.RELATED_NE_CUID = ONU.CUID
+    		UNION
+    		SELECT DEVICE.CUID,DEVICE.LABEL_CN FROM GPON_COVER A ,T_LOGIC_DEVICE DEVICE WHERE A.RELATED_NE_CUID = DEVICE.CUID
+    	</sql>
+    </combo>
+    
+     <combo name="GPONCOVERNEFROMNE">
+    	<sql dao="IbatisResDAO">
+		SELECT pos.CUID, pos.LABEL_CN
+   FROM fiber_dp_gx POS WHERE RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+			UNION ALL
+			SELECT ONU.CUID, ONU.LABEL_CN
+			  FROM fiber_cab_gx ONU
+			 WHERE RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+    	</sql>
+    </combo>
+    
+     <combo name="GPONCOVERNEFROMNENO">
+    	<sql dao="IbatisResDAO">
+			 SELECT POS.CUID, POS.LABEL_CN
+			  FROM fiber_dp_gx POS WHERE RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+			UNION ALL
+			SELECT ONU.CUID, ONU.LABEL_CN
+			  FROM fiber_cab_gx ONU
+			 WHERE RELATED_DISTRICT_CUID LIKE '{userDistrict}%'
+		
+    	</sql>
+    </combo>
+    
+    <combo name="GPONCOVERADDRESS">
+   		<sql dao="IbatisResDAO">
+   			SELECT A.CUID,A.LABEL_CN,RELATED_NE_CUID FROM T_ROFH_FULL_ADDRESS A,GPON_COVER B WHERE A.CUID = B.STANDARD_ADDR
+   		</sql>
+    </combo>
+    <combo name="COMBO_POS_RATION">
+		<items>
+			<item value="1:2">1:2</item>
+			<item value="1:4">1:4</item>
+			<item value="1:8">1:8</item>
+			<item value="1:16">1:16</item>
+			<item value="1:32">1:32</item>
+			<item value="1:64">1:64</item>
+			<item value="1:128">1:128</item>
+		</items>
+	</combo>
+	<combo name="IMPORT_OLT_COMBOX" allowDisControl="true">
+		<sql dao="IbatisResDAO">
+		<![CDATA[
+			SELECT '1' AS CUID,'是' AS LABEL_CN FROM DUAL
+			UNION ALL
+			SELECT '2' AS CUID,'否'  AS LABEL_CN FROM DUAL
+		]]>
+		</sql>
+	</combo>
+	<!-- 覆盖场景  -->
+	<combo name="GPON_SCENE_TYPE_1">
+		<sql dao="IbatisResDAO">
+			<![CDATA[
+			SELECT '1' AS CUID,'家庭场景'  AS LABEL_CN	 FROM dual
+			union all
+			SELECT '2' AS CUID,'校园场景'  AS LABEL_CN	 FROM dual
+			union all
+			SELECT '3' AS CUID,'聚类场景'  AS LABEL_CN	 FROM dual
+		]]>
+		</sql>
+	</combo>
+	<!--覆盖范围-->
+    <combo name="GPON_BUSINESS_TYPE">
+    	<items>
+    		<item value="1">语音</item>
+    		<item value="2">宽带</item>
+    		<item value="3">IPTV</item>
+    		<item value="4">一网通</item>
+    	</items>
+    </combo>
+	<combo name="GPON_SCENE_TYPE_2">
+		<sql dao="IbatisResDAO">
+			<![CDATA[
+			SELECT '31' AS CUID,'集体宿舍楼'  AS LABEL_CN	,'3' AS RELATED_SPACE_CUID  FROM dual
+			union all
+			SELECT '32' AS CUID,'党政军'  AS LABEL_CN	 ,'3' AS RELATED_SPACE_CUID FROM dual
+			union all
+			SELECT '33' AS CUID,'沿街商铺'  AS LABEL_CN	,'3' AS RELATED_SPACE_CUID FROM dual
+			union all
+			SELECT '34' AS CUID,'住宅区商铺'  AS LABEL_CN	,'3' AS RELATED_SPACE_CUID FROM dual
+			union all
+			SELECT '35' AS CUID,'商业楼宇'  AS LABEL_CN	,'3' AS RELATED_SPACE_CUID FROM dual
+			union all
+			SELECT '36' AS CUID,'工业园区'  AS LABEL_CN	,'3' AS RELATED_SPACE_CUID FROM dual
+		]]>
+		</sql>
+	</combo>
+	
+	
+	<combo name="DEV_NE_SELECT">
+		<sql dao="IbatisResDAO">
+			<![CDATA[
+			  select ao.cuid, ao.label_cn ,'onu' type
+			   from an_onu ao
+			 union all
+			 select ap.cuid, ap.label_cn,'pos' type from an_pos ap
+			]]>
+		</sql>
+	</combo>
+
+</tpl>

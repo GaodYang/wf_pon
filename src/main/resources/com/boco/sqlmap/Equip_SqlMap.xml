@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="EQUIP">
+
+	<!-- 查询设备下是否有端口 -->
+	<select id="queryPtpByRelatedNeCuid" parameterClass="java.util.ArrayList" resultClass="java.lang.Integer">
+		SELECT 1 FROM PTP WHERE RELATED_NE_CUID IN 
+		<iterate conjunction="," open="(" close=")">
+            #ptpsList[]#
+       </iterate>
+	</select>
+	
+	<!-- 查询onu名称是否存在 -->
+	<select id="queryOnuByLabelcn" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		SELECT 1 FROM AN_ONU WHERE LABEL_CN = #LABEL_CN#
+	</select>
+	
+	<!-- 删除onu -->
+	<delete id="deleteOnuByCuid" parameterClass="java.lang.String">
+		DELETE FROM AN_ONU WHERE CUID = #CUID#
+	</delete>
+	
+	<!-- 根据网元删除板卡 -->
+	<delete id="deleteCardByNeCuid" parameterClass="java.lang.String">
+		DELETE FROM CARD WHERE RELATED_DEVICE_CUID = #CUID#
+	</delete>
+	
+	<!-- 根据网元删除覆盖范围 -->
+	<delete id="deleteGponCoverbyNeCuid" parameterClass="java.lang.String">
+		DELETE FROM GPON_COVER WHERE RELATED_NE_CUID = #CUID#
+	</delete>
+	
+	<!-- 释放onu上联端口 -->
+	<update id="updateOnuPtpFree" parameterClass="java.lang.String">
+		update ptp p
+           set p.port_state = '1'
+         where p.cuid = (select nvl(ao.related_upne_port_cuid,
+                                    ao.related_pos_port_cuid)
+                           from an_onu ao
+                          where ao.cuid = #cuid#)
+	</update>
+	
+	<update id="updatePortState" parameterClass="com.boco.workflow.webservice.equip.dto.Ptp">
+		update ptp p
+			set p.port_state = #portState#
+			where p.cuid = #cuid#
+	</update>
+	
+	<!-- 根据网元型号得到对应的设备供应商 -->
+	<select id="queryVendorBymodel" parameterClass="java.lang.String" resultClass="com.boco.core.ibatis.vo.ResultMap">
+		SELECT CUID,LABEL_CN FROM DEVICE_VENDOR WHERE CUID=(SELECT VENDOR_NAME FROM NE_MODEL_CFG_TYPE WHERE CUID=#CUID#)	
+	</select>
+	
+	<!-- 查询onu信息 -->
+    <select id="queryOnuByCuid" parameterClass="java.lang.String" resultClass="com.boco.core.ibatis.vo.ResultMap">
+		SELECT A.CUID,
+		       A.LABEL_CN,
+		       A.DEV_IP,
+		       (SELECT T.LABEL_CN FROM AN_POS T WHERE T.CUID = A.RELATED_POS_CUID) AS N_RELATED_POS_CUID,
+		       A.RELATED_POS_CUID,
+		       (SELECT P.LABEL_CN FROM PTP P WHERE P.CUID = A.RELATED_POS_PORT_CUID) AS N_RELATED_POS_PORT_CUID,
+		       A.RELATED_POS_PORT_CUID,
+		       (SELECT D.LABEL_CN
+		          FROM DISTRICT D
+		         WHERE D.CUID = A.RELATED_DISTRICT_CUID) AS N_RELATED_DISTRICT_CUID,
+		       A.RELATED_DISTRICT_CUID,
+		       CASE
+		         WHEN A.RELATED_ROOM_CUID IS NOT NULL AND A.RELATED_ROOM_CUID != ' ' THEN
+		          A.RELATED_ROOM_CUID
+		         WHEN A.RELATED_ACCESS_POINT IS NOT NULL AND
+		              A.RELATED_ACCESS_POINT != ' ' THEN
+		          A.RELATED_ACCESS_POINT
+		       END RELATED_SPACE_CUID,
+		       CASE
+		         WHEN A.RELATED_ROOM_CUID IS NOT NULL AND A.RELATED_ROOM_CUID != ' ' THEN
+		          (SELECT R.LABEL_CN AS NAME
+		             FROM ROOM R
+		            WHERE R.CUID = A.RELATED_ROOM_CUID)
+		         WHEN A.RELATED_ACCESS_POINT IS NOT NULL AND
+		              A.RELATED_ACCESS_POINT != ' ' THEN
+		          (SELECT AP.LABEL_CN
+		             FROM ACCESSPOINT AP
+		            WHERE AP.CUID = A.RELATED_ACCESS_POINT)
+		       END N_RELATED_SPACE_CUID,
+		      (SELECT T.LABEL_CN
+		          FROM NMS_SYSTEM T
+		         WHERE T.CUID = A.RELATED_EMS_CUID) AS N_RELATED_EMS_CUID,
+		       A.RELATED_EMS_CUID,
+		       (SELECT D.LABEL_CN
+		          FROM DEVICE_VENDOR D
+		         WHERE D.CUID = A.RELATED_VENDOR_CUID) AS N_RELATED_VENDOR_CUID,
+		       A.RELATED_VENDOR_CUID,
+		       (SELECT F.PRODUCT_MODEL
+		          FROM NE_MODEL_CFG_TYPE F
+		         WHERE F.SIGNAL_TYPE = 9
+		           AND F.CUID = A.MODEL) AS N_MODEL,
+		       A.MODEL,
+		       (SELECT T.LABEL_CN
+		          FROM TRANS_ELEMENT T
+		         WHERE T.CUID = A.RELATED_OLT_CUID) AS N_RELATED_OLT_CUID,
+		       A.RELATED_OLT_CUID,
+		       (SELECT T.LABEL_CN FROM PTP T WHERE T.CUID = A.RELATED_OLT_PORT_CUID) AS N_RELATED_OLT_PORT_CUID,
+		       A.RELATED_OLT_PORT_CUID,
+		       A.NATIVE_EMS_NAME,
+		       A.SEQNO,
+		       A.HARD_VERSION,
+		       A.SOFT_VERSION,
+		       A.SETUP_TIME,
+		       A.REAL_LONGITUDE,
+		       A.OWNERSHIP_MAN,
+		       A.LATITUDE,
+		       A.REAL_LATITUDE,
+		       A.LONGITUDE,
+		       A.REMARK,
+		       A.AUTH_TYPE,
+		       A.MAC_ADDR,
+		       A.PASSWORD,
+		       A.LOGICID,
+		       A.ONU_ID,
+		       A.FTTX,
+		       A.ONU_TYPE,
+		       A.RELATED_TEMPLATE_NAME,
+		       A.RELATED_PROJECT_CUID,
+		       A.LAST_MODIFY_USER,
+		       A.CREATOR_NAME,
+		       A.OWNERSHIP,
+		       A.PORT_NUMBER,
+	           A.MAINT_PERSON,
+	           A.DATA_QUALITY_PERSON,
+		       A.MAINT_MODE,
+		       A.ACCESS_TYPE,
+		       A.LOCATION,
+		       A.STANDARD_NAME,
+		       A.RELATED_ACCESS_POINT,
+		       A.PRESERVER,
+		       A.CREATE_TIME,
+		       A.LIVE_CYCLE
+		  FROM AN_ONU A WHERE CUID = #CUID#
+    </select>
+    
+    <!-- 查询接入设备地址 -->
+    <select id="queryRelatedDistrictCuidByCabCuid" parameterClass="java.lang.String" resultClass="java.lang.String">
+		SELECT SUBSTR(RELATED_DISTRICT_CUID, 0, 26) AS RELATED_DISTRICT_CUID
+		  FROM FIBER_CAB_GX
+		 WHERE CUID = #CUID#
+		UNION ALL
+		SELECT SUBSTR(RELATED_DISTRICT_CUID, 0, 26) AS RELATED_DISTRICT_CUID
+		  FROM FIBER_DP_GX
+		 WHERE CUID = #CUID#
+	</select>
+	
+	<!-- 新增onu -->
+	<insert id="insertOnuInfo" parameterClass="java.util.HashMap">
+		INSERT INTO 
+		AN_ONU 
+			(CUID,OBJECTID,GT_VERSION,ISDELETE,LAST_MODIFY_TIME,LABEL_CN,RELATED_VENDOR_CUID,SETUP_TIME,SEQNO,RELATED_DISTRICT_CUID,REMARK,MODEL,HARD_VERSION,SOFT_VERSION,
+			DEV_IP,REAL_LONGITUDE,REAL_LATITUDE,NATIVE_EMS_NAME,RELATED_EMS_CUID,RELATED_ACCESS_POINT,AUTH_TYPE,MAC_ADDR,PASSWORD,LOGICID,
+			ONU_ID,FTTX,ONU_TYPE,RELATED_OLT_CUID,USE_STATE,RELATED_TEMPLATE_NAME,IS_PERMIT_SYS_DEL,LIVE_CYCLE,FDN,RELATED_OLT_PORT_CUID,
+			RELATED_ROOM_CUID,RELATED_SITE_CUID,RELATED_PROJECT_CUID,LAST_MODIFY_USER,CREATOR_NAME,CREATTIME,OWNERSHIP,OWNERSHIP_MAN,
+			PORT_NUMBER,MAINT_PERSON,DATA_QUALITY_PERSON,
+			MAINT_MODE,IS_CLOSENET,BACK_NETWORK_TIME,RELATED_POS_CUID,DEV_CUID,LOCATION,ACCESS_TYPE,RELATED_POS_PORT_CUID,CREATE_TIME,PRESERVER)
+		values 
+			(#CUID#,get_object_id('AN_ONU'),0,0,#LAST_MODIFY_TIME#,#LABEL_CN#,#RELATED_VENDOR_CUID#,#SETUP_TIME#,#SEQNO#,#RELATED_DISTRICT_CUID#,
+			#REMARK#,#MODEL#,#HARD_VERSION#,#SOFT_VERSION#,#DEV_IP#,#REAL_LONGITUDE#,#REAL_LATITUDE#,#NATIVE_EMS_NAME#,
+			#RELATED_EMS_CUID#,#RELATED_ACCESS_POINT#,#AUTH_TYPE#,#MAC_ADDR#,#PASSWORD#,#LOGICID#,#ONU_ID#,#FTTX#,#ONU_TYPE#,#RELATED_OLT_CUID#,1,#RELATED_TEMPLATE_NAME#,
+			0,#LIVE_CYCLE#,#FDN#,#RELATED_OLT_PORT_CUID#,
+			#RELATED_ROOM_CUID#,#RELATED_SITE_CUID#,#RELATED_PROJECT_CUID#,#LAST_MODIFY_USER#,#CREATOR_NAME#,#CREATTIME#,#OWNERSHIP#,#OWNERSHIP_MAN#,
+			#PORT_NUMBER#,#MAINT_PERSON#,#DATA_QUALITY_PERSON#,
+			#MAINT_MODE#,0,#BACK_NETWORK_TIME#,#RELATED_POS_CUID#,#DEV_CUID#,#LOCATION#,#ACCESS_TYPE#,#RELATED_POS_PORT_CUID#,#CREATE_TIME#,#PRESERVER#)
+	</insert>
+	
+	<!-- 修改onu -->
+	<update id="updateOnuInfo" parameterClass="java.util.HashMap">
+		UPDATE 
+		AN_ONU 
+		SET 
+		LAST_MODIFY_TIME=#LAST_MODIFY_TIME#,LABEL_CN=#LABEL_CN#,RELATED_VENDOR_CUID=#RELATED_VENDOR_CUID#,SETUP_TIME=#SETUP_TIME#,SEQNO=#SEQNO#,
+		RELATED_DISTRICT_CUID=#RELATED_DISTRICT_CUID#,REMARK=#REMARK#,MODEL=#MODEL#,HARD_VERSION=#HARD_VERSION#,SOFT_VERSION=#SOFT_VERSION#,
+		DEV_IP=#DEV_IP#,REAL_LONGITUDE=#REAL_LONGITUDE#,REAL_LATITUDE=#REAL_LATITUDE#,RELATED_OLT_PORT_CUID=#RELATED_OLT_PORT_CUID#,
+		NATIVE_EMS_NAME=#NATIVE_EMS_NAME#,RELATED_EMS_CUID=#RELATED_EMS_CUID#,RELATED_ACCESS_POINT=#RELATED_ACCESS_POINT#,
+		AUTH_TYPE=#AUTH_TYPE#,MAC_ADDR=#MAC_ADDR#,PASSWORD=#PASSWORD#,LOGICID=#LOGICID#,ONU_ID=#ONU_ID#,FTTX=#FTTX#,ONU_TYPE=#ONU_TYPE#,RELATED_OLT_CUID=#RELATED_OLT_CUID#,RELATED_POS_CUID=#RELATED_POS_CUID#,
+		FDN=#FDN#,RELATED_TEMPLATE_NAME=#RELATED_TEMPLATE_NAME#,STANDARD_NAME=#STANDARD_NAME# ,	RELATED_ROOM_CUID=#RELATED_ROOM_CUID#,RELATED_SITE_CUID=#RELATED_SITE_CUID#,LAST_MODIFY_USER=#LAST_MODIFY_USER#,
+		CREATOR_NAME=#CREATOR_NAME#,CREATE_TIME=#CREATE_TIME#,OWNERSHIP=#OWNERSHIP#,OWNERSHIP_MAN=#OWNERSHIP_MAN#,
+		PORT_NUMBER=#PORT_NUMBER#,MAINT_PERSON=#MAINT_PERSON#,DATA_QUALITY_PERSON=#DATA_QUALITY_PERSON#,
+		MAINT_MODE=#MAINT_MODE#,IS_CLOSENET=#IS_CLOSENET# ,BACK_NETWORK_TIME=#BACK_NETWORK_TIME#,LOCATION=#LOCATION#,ACCESS_TYPE=#ACCESS_TYPE#,LIVE_CYCLE=#LIVE_CYCLE#,
+        RELATED_POS_PORT_CUID=#RELATED_POS_PORT_CUID#,PRESERVER=#PRESERVER#
+		WHERE 
+		CUID = #CUID#
+	</update>
+	
+	<!-- 修改onu的板卡信息 -->
+	<update id="updateCardNameByOnu">
+		update card c
+		   set c.label_cn = ((select labeL_cn
+		                        from an_onu ap
+		                       where ap.cuid = c.related_device_cuid) || '-' ||
+		                    substr(fdn,
+		                            instr(fdn, 'slot=') + 5,
+		                            instr(fdn, ':Equipment=1') - instr(fdn, 'slot=') - 5) || '-' ||
+		                    nvl(trim(c.component_name), 'VBoard'))
+		 where c.related_device_cuid = #CUID#
+	</update>
+	
+	<!-- 修改onu的端口名称 -->
+	<update id="updatePtpNameByOnu">
+		update ptp p
+		   set p.label_cn = ((select labeL_cn
+		                        from card c
+		                       where c.cuid = p.related_card_cuid) || '-' ||
+		                    lpad(p.port_no, 2, 0))
+		 where p.related_ne_cuid = #CUID#
+	</update>
+	
+	<!-- 查询产品客户占用端口 -->
+	<select id="queryProductPort" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		SELECT 1 FROM t_sf_rofh_product WHERE access_port = #CUID#
+	</select>
+	
+	<!-- 查询设备占用端口 -->
+	<select id="queryDevRelatedPort" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select ao.label_cn from an_onu ao where ao.related_pos_port_cuid = #CUID#
+	  	  union all
+	    select ap.label_cn from an_pos ap where ap.related_upne_port_cuid = #CUID#
+	</select>
+	
+	<!-- 删除端口 -->
+	<delete id="deletePtpByCuid" parameterClass="java.util.HashMap">
+		DELETE FROM PTP WHERE CUID = #CUID#
+	</delete>
+	
+	<!-- 查询端口 -->
+	<select id="queryLoadPtpByCuid" parameterClass="java.lang.String" resultClass="com.boco.core.ibatis.vo.ResultMap">
+			SELECT 
+			'PTP' AS BM_CLASS_ID,
+			CASE 
+				WHEN P.DEV_TYPE = 1  THEN
+				(
+				   SELECT LABEL_CN FROM TRANS_ELEMENT WHERE CUID = P.RELATED_NE_CUID
+				)
+				WHEN P.DEV_TYPE = 2  THEN
+				(
+				   SELECT LABEL_CN FROM AN_ONU  WHERE CUID = P.RELATED_NE_CUID
+				)
+				WHEN P.DEV_TYPE = 3 THEN
+				(
+				   SELECT LABEL_CN FROM AN_POS WHERE CUID = P.RELATED_NE_CUID
+				)
+				END N_RELATED_NE_CUID,
+				P.RELATED_NE_CUID,
+		   CASE 
+				WHEN P.DEV_TYPE = 1  THEN
+				(SELECT (SELECT D.LABEL_CN AS NAME
+	                  FROM DISTRICT D
+	                 WHERE D.CUID = TE.RELATED_DISTRICT_CUID)
+			          FROM TRANS_ELEMENT TE
+			         WHERE TE.CUID = P.RELATED_NE_CUID)
+				WHEN P.DEV_TYPE = 2  THEN
+				(SELECT (SELECT D.LABEL_CN AS NAME
+	                  FROM DISTRICT D
+	                 WHERE D.CUID = AO.RELATED_DISTRICT_CUID)
+			          FROM AN_ONU AO
+			         WHERE AO.CUID = P.RELATED_NE_CUID)
+				WHEN P.DEV_TYPE = 3 THEN
+				(SELECT (SELECT D.LABEL_CN AS NAME
+	                  FROM DISTRICT D
+	                 WHERE D.CUID = AP.RELATED_DISTRICT_CUID)
+			          FROM AN_POS AP
+			         WHERE AP.CUID = P.RELATED_NE_CUID)
+				END N_RELATED_DISTRICT_CUID,
+			P.CUID,P.LABEL_CN,P.PORT_TYPE,P.PORT_SUB_TYPE,P.PORT_NO,P.PORT_STATE,P.VLAN,P.PORT_RATE,P.REMARK,
+			(SELECT C.LABEL_CN FROM CARD C WHERE C.CUID = P.RELATED_CARD_CUID) AS N_RELATED_CARD_CUID,P.RELATED_CARD_CUID,
+				(SELECT C.FDN FROM CARD C WHERE C.CUID = P.RELATED_CARD_CUID) AS N_FDN,
+				(select C.CARDTYPE_NAME FROM CARD_KIND C, CARD D WHERE D.MODEL=C.CUID AND D.CUID = P.RELATED_CARD_CUID) AS N_CARD_KIND_CUID
+			FROM PTP P WHERE P.CUID = #CUID#
+   </select>
+   
+   <!-- 查询单条端口信息 -->
+   <select id="queryPtpByCuid" parameterClass="java.lang.String" resultClass="com.boco.core.ibatis.vo.ResultMap">
+			SELECT 
+			P.CUID,P.LABEL_CN,P.PORT_TYPE,P.PORT_NO,P.PORT_SUB_TYPE,P.OPERATING_STATE,P.REMARK,
+			(SELECT C.LABEL_CN FROM CARD C WHERE C.CUID = P.RELATED_CARD_CUID) AS N_RELATED_CARD_CUID,P.RELATED_CARD_CUID,
+			(SELECT N.LABEL_CN  FROM NMS_SYSTEM N WHERE N.CUID = P.RELATED_EMS_CUID) AS N_RELATED_EMS_CUID,P.RELATED_EMS_CUID,
+			(SELECT T.LABEL_CN FROM TRANS_ELEMENT T WHERE T.CUID = P.RELATED_NE_CUID UNION 
+			SELECT O.LABEL_CN FROM AN_ONU O WHERE O.CUID = P.RELATED_NE_CUID UNION
+			SELECT A.LABEL_CN FROM AN_POS A WHERE A.CUID = P.RELATED_NE_CUID) AS N_RELATED_NE_CUID,P.RELATED_NE_CUID,PORT_RATE,VLAN,PORT_STATE
+			FROM PTP P WHERE P.CUID = #CUID#
+	 </select>
+	
+</sqlMap>

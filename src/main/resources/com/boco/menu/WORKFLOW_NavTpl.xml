@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tpl>
+
+	<nav id="WF_PON" name="家客资源" sort="2">
+		<navbar
+			id="pon.workfolw.index"
+			name="入网流程"
+			context="WF_PON"
+			sort="1"
+			code="pon.workfolw.index"/>	
+	</nav>
+</tpl>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tpl>
+	
+	<grid name="PROJECT_MANAGE" sql="PROJECT_MANAGE" title="项目管理">
+		<plugins>
+			<plugin>number</plugin>
+			<plugin>checkbox</plugin>
+		</plugins>
+				    
+		<columns>
+			<column dataIndex="CUID">CUID</column>
+			<column dataIndex="PRJ_NAME">工程名称</column>
+			<column dataIndex="PRJ_CODE">工程编号</column>
+			<column dataIndex="PRJ_CATEGORY">工程类别</column>
+			<column dataIndex="PRJ_TYPE">工程类型</column>
+			<column dataIndex="SETUP_NAME">立项文件名称</column>
+			<column dataIndex="SETUP_CODE">立项文号</column>
+			<column dataIndex="SETUP_REQFILE_CODE">立项申请文号</column>
+			<column dataIndex="SETUP_REQER_NAME">立项申请人</column>
+			<column dataIndex="SETUP_REQER_PHONE">立项申请人电话</column>
+			<column dataIndex="SETUP_REQ_DATE">立项申请日期</column>
+			<column dataIndex="COST">工程总投资(万)</column>
+			<column dataIndex="LENGTH">工程规模长度</column>
+			<column dataIndex="DOMAIN_NAME">所属地市</column>
+			<column dataIndex="PRJ_DESC">工程描述</column>
+			<column dataIndex="FTP_NAME">FTP文件名称</column>
+			<column dataIndex="PARENT_PRJ_CODE">所属工程编码</column>
+			<column dataIndex="CREATE_TIME">创建时间</column>
+			<column dataIndex="LAST_MODIFY_TIME">最后修改时间</column>
+		</columns>
+		<cm>
+		{
+			CUID:{
+				hidden : true
+			},
+			FTP_NAME:{
+				hidden : true
+			},
+			CREATE_TIME:{
+				renderer:'date'
+			},
+			LAST_MODIFY_TIME:{
+				hidden : true,
+				renderer:'date'
+			}
+		}
+		</cm>
+		<orderby>
+		</orderby>
+		<note>
+			项目管理
+		</note>
+	</grid>
+	
+	
+</tpl>

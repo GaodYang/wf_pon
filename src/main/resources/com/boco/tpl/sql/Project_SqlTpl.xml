@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tpl>
+	
+	<sql name="PROJECT_MANAGE" dao="IbatisResDAO">
+		<![CDATA[
+			select 
+				 SETUP_NAME         ,
+				 SETUP_CODE         ,
+				 SETUP_REQFILE_CODE ,
+				 SETUP_REQER_NAME   ,
+				 SETUP_REQER_PHONE  ,
+				 SETUP_REQ_DATE     ,
+				 PRJ_NAME           ,
+				 PRJ_CODE           ,
+				 PRJ_CATEGORY       ,
+				 PRJ_TYPE           ,
+				 COST               ,
+				 LENGTH             ,
+				 DOMAIN_NAME        ,
+				 PRJ_DESC           ,
+				 FTP_NAME           ,
+				 PARENT_PRJ_CODE    ,
+				 CUID               ,
+				 CREATE_TIME        ,
+				 USERNAME           ,
+				 PRJ_STATUS         ,
+				 LAST_MODIFY_TIME   
+			from T_WF_PROJECT
+		]]>
+	</sql>
+	
+</tpl>
